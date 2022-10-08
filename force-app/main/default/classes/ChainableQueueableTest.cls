@@ -1,9 +1,9 @@
 @IsTest
-public class ChainableTest {
+public class ChainableQueueableTest {
     @IsTest
-    public static void test_Chainable_SingleSuccess() {
-        List<ChainableAbstract> chainables = new List<ChainableAbstract>{
-            new ChainableSuccess('Test 1')
+    public static void chainableQueueableSingleSuccess() {
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueableSuccess('Test 1')
         };
 
         Test.startTest();
@@ -14,10 +14,10 @@ public class ChainableTest {
     }
 
     @IsTest
-    public static void test_Chainable_MultipleSuccess() {
-        List<ChainableAbstract> chainables = new List<ChainableAbstract>{
-            new ChainableSuccess('Test 1'),
-            new ChainableSuccess('Test 2')
+    public static void chainableQueueableMultipleSuccess() {
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueableSuccess('Test 1'),
+            new ChainableQueueableSuccess('Test 2')
         };
 
         Test.startTest();
@@ -28,12 +28,12 @@ public class ChainableTest {
     }
 
     @IsTest
-    public static void test_Chainable_PassThrough() {
+    public static void chainableQueueablePassThrough() {
         String chainableTestNamePrepend = 'Test';
 
-        List<ChainableAbstract> chainables = new List<ChainableAbstract>{
-            new ChainablePassThrough(chainableTestNamePrepend),
-            new ChainablePassThrough(chainableTestNamePrepend)
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueablePassThrough(chainableTestNamePrepend),
+            new ChainableQueueablePassThrough(chainableTestNamePrepend)
         };
 
         Test.startTest();
@@ -50,10 +50,10 @@ public class ChainableTest {
     }
 
     @IsTest
-    public static void test_Chainable_RunNextTrue() {
-        List<ChainableAbstract> chainables = new List<ChainableAbstract>{
-            new ChainableRunNext(true),
-            new ChainableSuccess('Test')
+    public static void chainableQueueableRunNextTrue() {
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueableRunNext(true),
+            new ChainableQueueableSuccess('Test')
         };
 
         Test.startTest();
@@ -64,10 +64,10 @@ public class ChainableTest {
     }
 
     @IsTest
-    public static void test_Chainable_RunNextFalse() {
-        List<ChainableAbstract> chainables = new List<ChainableAbstract>{
-            new ChainableRunNext(false),
-            new ChainableSuccess('Test')
+    public static void chainableQueueableRunNextFalse() {
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueableRunNext(false),
+            new ChainableQueueableSuccess('Test')
         };
 
         Test.startTest();
@@ -78,12 +78,12 @@ public class ChainableTest {
     }
 
     @IsTest
-    public static void test_Chainable_CustomFinalizer() {
+    public static void chainableQueueableCustomFinalizer() {
         final String CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME = 'Custom Finalizer Test';
 
-        List<ChainableAbstract> chainables = new List<ChainableAbstract>{
-            new ChainableSuccessWithCustomFinalizer('Test', new ChainableFinalizerCustom(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME)),
-            new ChainableSuccess('Test')
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueableQueueableSuccessWithCustomFinalizer('Test', new ChainableFinalizerCustom(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME)),
+            new ChainableQueueableSuccess('Test')
         };
 
         Test.startTest();
@@ -103,10 +103,10 @@ public class ChainableTest {
      * @description Coverage test for finalizer error handling. Unfortunately not able to test finalizer error handling works correctly.
      */
     @IsTest
-    public static void test_Chainable_FinalizerErrorHandlingCoverage() {
-        List<ChainableAbstract> chainables = new List<ChainableAbstract>{
-            new ChainableError(),
-            new ChainableSuccess('Test')
+    public static void chainableQueueableFinalizerErrorHandlingCoverage() {
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueableError(),
+            new ChainableQueueableSuccess('Test')
         };
 
         try {
@@ -124,23 +124,23 @@ public class ChainableTest {
         insert new Chainable_Test__c(Name = chainableTestName);
     }
 
-    private class ChainableSuccess extends ChainableAbstract {
+    private class ChainableQueueableSuccess extends ChainableQueueable {
         private String chainableTestName;
 
-        public ChainableSuccess(String chainableTestName) {
+        public ChainableQueueableSuccess(String chainableTestName) {
             this.chainableTestName = chainableTestName;
         }
 
         public override Boolean execute() {
-            ChainableTest.insertChainableTest(this.chainableTestName);
+            ChainableQueueableTest.insertChainableTest(this.chainableTestName);
             return true;
         }
     }
 
-    private class ChainableRunNext extends ChainableAbstract {
+    private class ChainableQueueableRunNext extends ChainableQueueable {
         private Boolean runNext;
 
-        public ChainableRunNext(Boolean runNext) {
+        public ChainableQueueableRunNext(Boolean runNext) {
             this.runNext = runNext;
         }
 
@@ -149,36 +149,36 @@ public class ChainableTest {
         }
     }
 
-    private class ChainablePassThrough extends ChainableAbstract {
+    private class ChainableQueueablePassThrough extends ChainableQueueable {
         private String chainableTestNamePrepend;
 
-        public ChainablePassThrough(String chainableTestNamePrepend) {
+        public ChainableQueueablePassThrough(String chainableTestNamePrepend) {
             this.chainableTestNamePrepend = chainableTestNamePrepend;
         }
 
         public override Boolean execute() {
-            ChainableTest.insertChainableTest(ChainableTest.generateChainableTestName(this.chainableTestNamePrepend, (Integer) this.passThrough));
+            ChainableQueueableTest.insertChainableTest(ChainableQueueableTest.generateChainableTestName(this.chainableTestNamePrepend, (Integer) this.passThrough));
             this.passThrough = (Integer) this.passThrough + 1;
             return true;
         }
     }
 
-    private class ChainableError extends ChainableAbstract {
+    private class ChainableQueueableError extends ChainableQueueable {
         public override Boolean execute() {
             throw new DmlException('Test finalizer');
         }
     }
 
-    private class ChainableSuccessWithCustomFinalizer extends ChainableAbstract {
+    private class ChainableQueueableQueueableSuccessWithCustomFinalizer extends ChainableQueueable {
         private String chainableTestName;
 
-        public ChainableSuccessWithCustomFinalizer(String chainableTestName, ChainableFinalizer finalizer) {
+        public ChainableQueueableQueueableSuccessWithCustomFinalizer(String chainableTestName, ChainableFinalizer finalizer) {
             super(finalizer);
             this.chainableTestName = chainableTestName;
         }
 
         public override Boolean execute() {
-            ChainableTest.insertChainableTest(this.chainableTestName);
+            ChainableQueueableTest.insertChainableTest(this.chainableTestName);
             return true;
         }
     }
@@ -192,7 +192,7 @@ public class ChainableTest {
         }
 
         protected override void executeOnSuccessCustom() {
-            ChainableTest.insertChainableTest(this.chainableTestName);
+            ChainableQueueableTest.insertChainableTest(this.chainableTestName);
         }
     }
 }

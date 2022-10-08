@@ -1,5 +1,5 @@
 public virtual class ChainableFinalizer implements Finalizer {
-    public List<ChainableAbstract> chainables;
+    public List<Chainable> chainables;
     protected FinalizerContext context;
     public Boolean runNext;
     public Object passThrough;

@@ -1,14 +1,12 @@
-public abstract class ChainableAbstract implements Queueable {
+public abstract class ChainableQueueable extends Chainable implements Queueable  {
     private ChainableFinalizer finalizer;
-    public List<ChainableAbstract> chainables;
     protected QueueableContext context;
-    public Object passThrough;
 
-    public ChainableAbstract() {
+    public ChainableQueueable() {
         this(new ChainableFinalizer());
     }
 
-    public ChainableAbstract(ChainableFinalizer finalizer) {
+    public ChainableQueueable(ChainableFinalizer finalizer) {
         this.finalizer = finalizer;
     }
 
@@ -39,7 +37,7 @@ public abstract class ChainableAbstract implements Queueable {
     /**
      * @description Enqueues the chainable
      */
-    public void run() {
+    public override void run() {
         System.enqueueJob(this);
     }
 
