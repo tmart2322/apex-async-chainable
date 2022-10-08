@@ -191,11 +191,8 @@ public class ChainableTest {
             this.chainableTestName = chainableTestName;
         }
 
-        protected override void execute() {
-            if (this.runNext) {
-                ChainableTest.insertChainableTest(this.chainableTestName);
-                ChainableUtility.runChainables(this.chainables, this.passThrough);
-            }
+        protected override void executeOnSuccessCustom() {
+            ChainableTest.insertChainableTest(this.chainableTestName);
         }
     }
 }

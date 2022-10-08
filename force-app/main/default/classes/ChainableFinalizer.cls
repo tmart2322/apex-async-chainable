@@ -19,7 +19,7 @@ public virtual class ChainableFinalizer implements Finalizer {
         this.context = context;
         switch on context.getResult() {
             when SUCCESS {
-                execute();
+                executeOnSuccess();
             }
             when UNHANDLED_EXCEPTION {
                 executeOnUnhandledException();
@@ -30,16 +30,32 @@ public virtual class ChainableFinalizer implements Finalizer {
     /**
      * @description called when the queueable completed successfully
      */
-    protected virtual void execute() {
-        if (this.runNext) {
-            ChainableUtility.runChainables(this.chainables, this.passThrough);
-        }
+    protected virtual void executeOnSuccess() {
+        this.executeOnSuccessCustom();
+        this.executeNext();
     }
+    
+    /**
+     * @description optional method that can be implemented by the developer to do custom logic on success
+     */
+    protected virtual void executeOnSuccessCustom() {}
 
     /**
      * @description called when the queueable failed due to an uncaught exception
      */
     protected virtual void executeOnUnhandledException() {
-        this.execute();
+        this.executeOnUnhandledExceptionCustom();
+        this.executeNext();
+    }
+
+    /**
+     * @description optional method that can be implemented by the developer to do custom logic on unhandled exception
+     */
+    protected virtual void executeOnUnhandledExceptionCustom() {}
+
+    protected void executeNext() {
+        if (this.runNext) {
+            ChainableUtility.runChainables(this.chainables, this.passThrough);
+        }
     }
 }
