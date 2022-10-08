@@ -1,4 +1,4 @@
-public abstract class ChainableQueueable extends Chainable implements Queueable  {
+public abstract class ChainableQueueable extends Chainable implements Queueable, Database.AllowsCallouts {
     private ChainableFinalizer finalizer;
     protected QueueableContext context;
 
@@ -16,14 +16,6 @@ public abstract class ChainableQueueable extends Chainable implements Queueable 
      */
     public void execute(QueueableContext context) {
         this.context = context;
-        executeWrapper();
-    }
-
-    /**
-     * @description Wrapper to chain multiple queueables together
-     */
-    @TestVisible
-    private void executeWrapper() {
         finalizer.chainables = this.chainables;
         finalizer.passThrough = this.passThrough;
         System.attachFinalizer(finalizer);
