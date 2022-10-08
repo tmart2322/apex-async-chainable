@@ -42,8 +42,8 @@ public class ChainableQueueableTest {
 
         List<Chainable_Test__c> chainableTests = ChainableTestUtility.getChainableTests();
         Set<String> chainableTestNames = ChainableTestUtility.getChainableTestNames(chainableTests);
-        System.assert(chainableTestNames.contains(ChainableTestUtility.generateChainableTestName(chainableTestNamePrepend, String.valueOf(1))), 'First Chainable_Test__c name should be appended with 1');
-        System.assert(chainableTestNames.contains(ChainableTestUtility.generateChainableTestName(chainableTestNamePrepend, String.valueOf(1))), 'Second Chainable_Test__c name should be appended with 2');
+        System.assert(chainableTestNames.contains(ChainableTestUtility.joinStrings(chainableTestNamePrepend, String.valueOf(1))), 'First Chainable_Test__c name should be appended with 1');
+        System.assert(chainableTestNames.contains(ChainableTestUtility.joinStrings(chainableTestNamePrepend, String.valueOf(1))), 'Second Chainable_Test__c name should be appended with 2');
     }
 
     @IsTest
@@ -143,7 +143,7 @@ public class ChainableQueueableTest {
         }
 
         public override Boolean execute() {
-            ChainableTestUtility.insertChainableTest(ChainableTestUtility.generateChainableTestName(this.chainableTestNamePrepend, String.valueOf((Integer) this.passThrough)));
+            ChainableTestUtility.insertChainableTest(ChainableTestUtility.joinStrings(this.chainableTestNamePrepend, String.valueOf((Integer) this.passThrough)));
             this.passThrough = (Integer) this.passThrough + 1;
             return true;
         }

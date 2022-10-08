@@ -1,6 +1,6 @@
 @IsTest
 public class ChainableTestUtility {
-    public static String generateChainableTestName(String chainableTestPrepend, String chainableTestAppend) {
+    public static String joinStrings(String chainableTestPrepend, String chainableTestAppend) {
         return String.format('{0} {1}', new List<String>{chainableTestPrepend, chainableTestAppend});
     }
 
