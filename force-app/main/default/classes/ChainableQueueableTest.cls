@@ -10,7 +10,7 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(1, [SELECT COUNT() FROM Chainable_Test__c], 'Should successfully insert a Chainable_Test__c when called');
+        System.assertEquals(1, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert a Chainable_Test__c when called');
     }
 
     @IsTest
@@ -24,7 +24,7 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(2, [SELECT COUNT() FROM Chainable_Test__c], 'Should successfully insert two Chainable_Test__c when called');
+        System.assertEquals(2, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert two Chainable_Test__c when called');
     }
 
     @IsTest
@@ -40,13 +40,10 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables, 1);
         Test.stopTest();
 
-        List<Chainable_Test__c> chainableTests = [SELECT Name FROM Chainable_Test__c];
-        Set<String> chainableTestNames = new Set<String>();
-        for (Chainable_Test__c chainableTest : chainableTests) {
-            chainableTestNames.add(chainableTest.Name);
-        }
-        System.assert(chainableTestNames.contains(generateChainableTestName(chainableTestNamePrepend, 1)), 'First Chainable_Test__c name should be appended with 1');
-        System.assert(chainableTestNames.contains(generateChainableTestName(chainableTestNamePrepend, 2)), 'Second Chainable_Test__c name should be appended with 2');
+        List<Chainable_Test__c> chainableTests = ChainableTestUtility.getChainableTests();
+        Set<String> chainableTestNames = ChainableTestUtility.getChainableTestNames(chainableTests);
+        System.assert(chainableTestNames.contains(ChainableTestUtility.generateChainableTestName(chainableTestNamePrepend, String.valueOf(1))), 'First Chainable_Test__c name should be appended with 1');
+        System.assert(chainableTestNames.contains(ChainableTestUtility.generateChainableTestName(chainableTestNamePrepend, String.valueOf(1))), 'Second Chainable_Test__c name should be appended with 2');
     }
 
     @IsTest
@@ -60,7 +57,7 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(1, [SELECT COUNT() FROM Chainable_Test__c], 'Should insert Chainable_Test__c in second chainable if first chainable returns true from execute');
+        System.assertEquals(1, ChainableTestUtility.getChainableTests().size(), 'Should insert Chainable_Test__c in second chainable if first chainable returns true from execute');
     }
 
     @IsTest
@@ -74,7 +71,7 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(0, [SELECT COUNT() FROM Chainable_Test__c], 'Should not insert Chainable_Test__c in second chainable if first chainable returns false from execute');
+        System.assertEquals(0, ChainableTestUtility.getChainableTests().size(), 'Should not insert Chainable_Test__c in second chainable if first chainable returns false from execute');
     }
 
     @IsTest
@@ -82,7 +79,7 @@ public class ChainableQueueableTest {
         final String CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME = 'Custom Finalizer Test';
 
         List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableQueueableSuccessWithCustomFinalizer('Test', new ChainableFinalizerCustom(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME)),
+            new ChainableQueueableSuccessWithCustomFinalizer('Test', new ChainableFinalizerCustom(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME)),
             new ChainableQueueableSuccess('Test')
         };
 
@@ -90,12 +87,9 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        List<Chainable_Test__c> chainableTests = [SELECT Name FROM Chainable_Test__c];
-        Set<String> chainableTestNames = new Set<String>();
-        for (Chainable_Test__c chainableTest : chainableTests) {
-            chainableTestNames.add(chainableTest.Name);
-        }
-        System.assertEquals(3,chainableTests.size(), 'Chainables should each insert 1 Chainable_Test__c and finalizer should insert 1 Chainable_Test__c for a total of 3');
+        List<Chainable_Test__c> chainableTests = ChainableTestUtility.getChainableTests();
+        Set<String> chainableTestNames = ChainableTestUtility.getChainableTestNames(chainableTests);
+        System.assertEquals(3, chainableTests.size(), 'Chainables should each insert 1 Chainable_Test__c and finalizer should insert 1 Chainable_Test__c for a total of 3');
         System.assert(chainableTestNames.contains(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME), 'Finalizer should insert Chainable_Test__c with specified name');
     }
 
@@ -116,14 +110,6 @@ public class ChainableQueueableTest {
         } catch (Exception e) {}
     }
 
-    public static String generateChainableTestName(String chainableTestNamePrepend, Integer chainableNumber) {
-        return chainableTestNamePrepend + ' ' + chainableNumber;
-    }
-
-    public static void insertChainableTest(String chainableTestName) {
-        insert new Chainable_Test__c(Name = chainableTestName);
-    }
-
     private class ChainableQueueableSuccess extends ChainableQueueable {
         private String chainableTestName;
 
@@ -132,7 +118,7 @@ public class ChainableQueueableTest {
         }
 
         public override Boolean execute() {
-            ChainableQueueableTest.insertChainableTest(this.chainableTestName);
+            ChainableTestUtility.insertChainableTest(this.chainableTestName);
             return true;
         }
     }
@@ -157,7 +143,7 @@ public class ChainableQueueableTest {
         }
 
         public override Boolean execute() {
-            ChainableQueueableTest.insertChainableTest(ChainableQueueableTest.generateChainableTestName(this.chainableTestNamePrepend, (Integer) this.passThrough));
+            ChainableTestUtility.insertChainableTest(ChainableTestUtility.generateChainableTestName(this.chainableTestNamePrepend, String.valueOf((Integer) this.passThrough)));
             this.passThrough = (Integer) this.passThrough + 1;
             return true;
         }
@@ -169,16 +155,16 @@ public class ChainableQueueableTest {
         }
     }
 
-    private class ChainableQueueableQueueableSuccessWithCustomFinalizer extends ChainableQueueable {
+    private class ChainableQueueableSuccessWithCustomFinalizer extends ChainableQueueable {
         private String chainableTestName;
 
-        public ChainableQueueableQueueableSuccessWithCustomFinalizer(String chainableTestName, ChainableFinalizer finalizer) {
+        public ChainableQueueableSuccessWithCustomFinalizer(String chainableTestName, ChainableFinalizer finalizer) {
             super(finalizer);
             this.chainableTestName = chainableTestName;
         }
 
         public override Boolean execute() {
-            ChainableQueueableTest.insertChainableTest(this.chainableTestName);
+            ChainableTestUtility.insertChainableTest(this.chainableTestName);
             return true;
         }
     }
@@ -192,7 +178,7 @@ public class ChainableQueueableTest {
         }
 
         protected override void executeOnSuccessCustom() {
-            ChainableQueueableTest.insertChainableTest(this.chainableTestName);
+            ChainableTestUtility.insertChainableTest(this.chainableTestName);
         }
     }
 }
