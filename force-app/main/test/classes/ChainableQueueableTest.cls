@@ -79,7 +79,7 @@ public class ChainableQueueableTest {
         final String CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME = 'Custom Finalizer Test';
 
         List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableSuccessWithCustomFinalizer('Test', new ChainableFinalizerCustom(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME)),
+            new ChainableQueueableSuccessCustomFinalizer('Test', new ChainableFinalizerCustom(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME)),
             new ChainableQueueableSuccess('Test')
         };
 
@@ -108,77 +108,5 @@ public class ChainableQueueableTest {
             ChainableUtility.runChainables(chainables);
             Test.stopTest();
         } catch (Exception e) {}
-    }
-
-    private class ChainableQueueableSuccess extends ChainableQueueable {
-        private String chainableTestName;
-
-        public ChainableQueueableSuccess(String chainableTestName) {
-            this.chainableTestName = chainableTestName;
-        }
-
-        public override Boolean execute() {
-            ChainableTestUtility.insertChainableTest(this.chainableTestName);
-            return true;
-        }
-    }
-
-    private class ChainableQueueableRunNext extends ChainableQueueable {
-        private Boolean runNext;
-
-        public ChainableQueueableRunNext(Boolean runNext) {
-            this.runNext = runNext;
-        }
-
-        public override Boolean execute() {
-            return runNext;
-        }
-    }
-
-    private class ChainableQueueablePassThrough extends ChainableQueueable {
-        private String chainableTestNamePrepend;
-
-        public ChainableQueueablePassThrough(String chainableTestNamePrepend) {
-            this.chainableTestNamePrepend = chainableTestNamePrepend;
-        }
-
-        public override Boolean execute() {
-            ChainableTestUtility.insertChainableTest(ChainableTestUtility.joinStrings(this.chainableTestNamePrepend, String.valueOf((Integer) this.passThrough)));
-            this.passThrough = (Integer) this.passThrough + 1;
-            return true;
-        }
-    }
-
-    private class ChainableQueueableError extends ChainableQueueable {
-        public override Boolean execute() {
-            throw new DmlException('Test finalizer');
-        }
-    }
-
-    private class ChainableQueueableSuccessWithCustomFinalizer extends ChainableQueueable {
-        private String chainableTestName;
-
-        public ChainableQueueableSuccessWithCustomFinalizer(String chainableTestName, ChainableFinalizer finalizer) {
-            super(finalizer);
-            this.chainableTestName = chainableTestName;
-        }
-
-        public override Boolean execute() {
-            ChainableTestUtility.insertChainableTest(this.chainableTestName);
-            return true;
-        }
-    }
-
-    private class ChainableFinalizerCustom extends ChainableFinalizer {
-        private String chainableTestName;
-
-        public ChainableFinalizerCustom(String chainableTestName) {
-            super();
-            this.chainableTestName = chainableTestName;
-        }
-
-        protected override void executeOnSuccessCustom() {
-            ChainableTestUtility.insertChainableTest(this.chainableTestName);
-        }
     }
 }

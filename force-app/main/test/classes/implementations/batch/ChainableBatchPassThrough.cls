@@ -1,3 +1,4 @@
+@IsTest
 public class ChainableBatchPassThrough extends ChainableBatch {
     private Id chainableTestId;
 

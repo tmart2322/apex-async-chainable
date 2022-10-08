@@ -1,3 +1,4 @@
+@IsTest
 public class ChainableBatchSuccess extends ChainableBatch {
     private Id chainableTestId;
     private String chainableTestNameAppend;

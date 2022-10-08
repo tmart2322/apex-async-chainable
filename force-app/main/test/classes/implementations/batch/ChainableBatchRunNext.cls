@@ -1,3 +1,4 @@
+@IsTest
 public class ChainableBatchRunNext extends ChainableBatch {
     private Id chainableTestId;
     private Boolean runNext;
