@@ -16,6 +16,8 @@ This library enables chaining of any number of asynchronous processes (Batch, Qu
             -   [Accessing Queueable, Schedulable, or Batch Context](#accessing-queueable-schedulable-or-batch-context)
             -   [Adding a Chainable in the Middle of a Chainable Execution](#adding-a-chainable-in-the-middle-of-a-chainable-execution)
 
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 ## Library Overview
 
 Chaining asynchronous processes together can be cumbersome in Salesforce. This library aims to make this process simpler by doing the following:
