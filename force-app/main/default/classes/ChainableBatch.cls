@@ -1,5 +1,14 @@
 public abstract class ChainableBatch extends Chainable implements Database.Batchable<sObject>, Database.Stateful, Database.AllowsCallouts {
     protected Database.BatchableContext context;
+    private Integer batchSize;
+
+    public ChainableBatch() {
+        this(200);
+    }
+
+    public ChainableBatch(Integer batchSize) {
+        this.batchSize = batchSize;
+    }
 
     public Database.QueryLocator start(Database.BatchableContext context) {
         this.context = context;
@@ -20,7 +29,7 @@ public abstract class ChainableBatch extends Chainable implements Database.Batch
     }
 
     public override void run() {
-        Database.executeBatch(this);
+        Database.executeBatch(this, this.batchSize);
     }
 
     protected abstract Database.QueryLocator start();

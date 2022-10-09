@@ -7,7 +7,11 @@ public virtual class ChainableFinalizer implements Finalizer {
      * @description Constructor
      */
     public ChainableFinalizer() {
-        this.runNextChainable = false;
+        this(false);
+    }
+
+    public ChainableFinalizer(Boolean runNextChainable) {
+        this.runNextChainable = runNextChainable;
     }
 
     /**
