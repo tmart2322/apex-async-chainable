@@ -10,7 +10,11 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(1, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert a Chainable_Test__c when called');
+        System.assertEquals(
+            1,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should successfully insert a Chainable_Test__c when called'
+        );
     }
 
     @IsTest
@@ -24,7 +28,11 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(2, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert two Chainable_Test__c when called');
+        System.assertEquals(
+            2,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should successfully insert two Chainable_Test__c when called'
+        );
     }
 
     @IsTest
@@ -35,7 +43,11 @@ public class ChainableQueueableTest {
             .run();
         Test.stopTest();
 
-        System.assertEquals(2, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert two Chainable_Test__c when called');
+        System.assertEquals(
+            2,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should successfully insert two Chainable_Test__c when called'
+        );
     }
 
     @IsTest
@@ -46,7 +58,11 @@ public class ChainableQueueableTest {
             .run();
         Test.stopTest();
 
-        System.assertEquals(3, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert two Chainable_Test__c when called');
+        System.assertEquals(
+            3,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should successfully insert two Chainable_Test__c when called'
+        );
     }
 
     @IsTest
@@ -63,9 +79,27 @@ public class ChainableQueueableTest {
         Test.stopTest();
 
         List<Chainable_Test__c> chainableTests = ChainableTestUtility.getChainableTests();
-        Set<String> chainableTestNames = ChainableTestUtility.getChainableTestNames(chainableTests);
-        System.assert(chainableTestNames.contains(ChainableTestUtility.joinStrings(chainableTestNamePrepend, String.valueOf(1))), 'First Chainable_Test__c name should be appended with 1');
-        System.assert(chainableTestNames.contains(ChainableTestUtility.joinStrings(chainableTestNamePrepend, String.valueOf(1))), 'Second Chainable_Test__c name should be appended with 2');
+        Set<String> chainableTestNames = ChainableTestUtility.getChainableTestNames(
+            chainableTests
+        );
+        System.assert(
+            chainableTestNames.contains(
+                ChainableTestUtility.joinStrings(
+                    chainableTestNamePrepend,
+                    String.valueOf(1)
+                )
+            ),
+            'First Chainable_Test__c name should be appended with 1'
+        );
+        System.assert(
+            chainableTestNames.contains(
+                ChainableTestUtility.joinStrings(
+                    chainableTestNamePrepend,
+                    String.valueOf(1)
+                )
+            ),
+            'Second Chainable_Test__c name should be appended with 2'
+        );
     }
 
     @IsTest
@@ -79,7 +113,11 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(1, ChainableTestUtility.getChainableTests().size(), 'Should insert Chainable_Test__c in second chainable if first chainable returns true from execute');
+        System.assertEquals(
+            1,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should insert Chainable_Test__c in second chainable if first chainable returns true from execute'
+        );
     }
 
     @IsTest
@@ -93,7 +131,11 @@ public class ChainableQueueableTest {
         ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
-        System.assertEquals(0, ChainableTestUtility.getChainableTests().size(), 'Should not insert Chainable_Test__c in second chainable if first chainable returns false from execute');
+        System.assertEquals(
+            0,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should not insert Chainable_Test__c in second chainable if first chainable returns false from execute'
+        );
     }
 
     @IsTest
@@ -101,7 +143,12 @@ public class ChainableQueueableTest {
         final String CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME = 'Custom Finalizer Test';
 
         List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableSuccessCustomFinalizer('Test', new ChainableFinalizerCustom(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME)),
+            new ChainableQueueableSuccessCustomFinalizer(
+                'Test',
+                new ChainableFinalizerCustom(
+                    CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME
+                )
+            ),
             new ChainableQueueableSuccess('Test')
         };
 
@@ -110,9 +157,20 @@ public class ChainableQueueableTest {
         Test.stopTest();
 
         List<Chainable_Test__c> chainableTests = ChainableTestUtility.getChainableTests();
-        Set<String> chainableTestNames = ChainableTestUtility.getChainableTestNames(chainableTests);
-        System.assertEquals(3, chainableTests.size(), 'Chainables should each insert 1 Chainable_Test__c and finalizer should insert 1 Chainable_Test__c for a total of 3');
-        System.assert(chainableTestNames.contains(CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME), 'Finalizer should insert Chainable_Test__c with specified name');
+        Set<String> chainableTestNames = ChainableTestUtility.getChainableTestNames(
+            chainableTests
+        );
+        System.assertEquals(
+            3,
+            chainableTests.size(),
+            'Chainables should each insert 1 Chainable_Test__c and finalizer should insert 1 Chainable_Test__c for a total of 3'
+        );
+        System.assert(
+            chainableTestNames.contains(
+                CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME
+            ),
+            'Finalizer should insert Chainable_Test__c with specified name'
+        );
     }
 
     /**
@@ -129,6 +187,7 @@ public class ChainableQueueableTest {
             Test.startTest();
             ChainableUtility.runChainables(chainables);
             Test.stopTest();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }
