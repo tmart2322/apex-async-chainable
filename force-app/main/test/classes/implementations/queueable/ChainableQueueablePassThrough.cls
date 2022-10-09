@@ -7,8 +7,13 @@ public class ChainableQueueablePassThrough extends ChainableQueueable {
     }
 
     public override Boolean execute() {
-        ChainableTestUtility.insertChainableTest(ChainableTestUtility.joinStrings(this.chainableTestNamePrepend, String.valueOf((Integer) this.passThrough)));
-        this.passThrough = (Integer) this.passThrough + 1;
+        ChainableTestUtility.insertChainableTest(
+            ChainableTestUtility.joinStrings(
+                this.chainableTestNamePrepend,
+                String.valueOf((Integer) this.passThrough)
+            )
+        );
+        this.setPassThrough((Integer) this.passThrough + 1);
         return true;
     }
 }

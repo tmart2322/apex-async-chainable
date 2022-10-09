@@ -1,17 +1,46 @@
+/**
+ * @description `ChainableQueueable` An abstract class for implementing a Queueable Chainable.
+ * @author Tristan Martin
+ * @since October 9th, 2022
+ */
 public abstract class ChainableQueueable extends Chainable implements Queueable, Database.AllowsCallouts {
-    private ChainableFinalizer finalizer;
+    // INSTANCE VARIABLES
+    /**
+     * context the QueueableContext of the Queueable
+     */
     protected QueueableContext context;
+    /**
+     * finalizer the instace of the QueueableFinalizer to run after the implementation
+     */
+    private ChainableFinalizer finalizer;
 
+    // CONSTRUCTORS
+    /**
+     * @description Uses the default ChainableFinalizer.
+     */
     public ChainableQueueable() {
         this(new ChainableFinalizer());
     }
 
+    /**
+     * @description Allows a user-defined ChainableFinalizer to be used.
+     * @param finalizer The ChainableFinalizer to use
+     */
     public ChainableQueueable(ChainableFinalizer finalizer) {
         this.finalizer = finalizer;
     }
 
+    // ABSTRACT METHODS
     /**
-     * @description Overrides the default execute method to call the execute abstract method which will be implemented by the user
+     * @description Custom queueable logic implemented by the developer
+     * @return `Boolean` whether to run the next queueable or not
+     */
+    public abstract Boolean execute();
+
+    // PUBLIC METHODS
+    /**
+     * @description Overrides the default execute method to call the execute abstract method
+     * which will be implemented by the user and initializes the finalizer.
      * @param context QueueableContext context of the queueable
      */
     public void execute(QueueableContext context) {
@@ -24,15 +53,9 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
     }
 
     /**
-     * @description Enqueues the chainable
+     * @description Enqueues the queueable
      */
     public override void run() {
         System.enqueueJob(this);
     }
-
-    /**
-     * @description Custom queueable logic implemented by the developer
-     * @return `Boolean` whether to run the next queueable or not
-     */
-    public abstract Boolean execute();
 }
