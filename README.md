@@ -25,7 +25,7 @@ List<Chainable> chainables = new List<Chainables>{
     new BatchJob(),
     new QueueableJob(),
     new AnotherQueueableJob()
-  ...
+    ...
 };
 ChainableUtility.runChainables(chainables);
 ```
