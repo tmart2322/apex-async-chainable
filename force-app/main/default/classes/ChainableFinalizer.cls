@@ -1,14 +1,13 @@
 public virtual class ChainableFinalizer implements Finalizer {
-    public List<Chainable> chainables;
+    public Chainable current;
     protected FinalizerContext context;
-    public Boolean runNext;
-    public Object passThrough;
+    public Boolean runNextChainable;
 
     /**
      * @description Constructor
      */
     public ChainableFinalizer() {
-        this.runNext = false;
+        this.runNextChainable = false;
     }
 
     /**
@@ -32,7 +31,7 @@ public virtual class ChainableFinalizer implements Finalizer {
      */
     protected virtual void executeOnSuccess() {
         this.executeOnSuccessCustom();
-        this.executeNext();
+        this.runNext();
     }
     
     /**
@@ -45,7 +44,7 @@ public virtual class ChainableFinalizer implements Finalizer {
      */
     protected virtual void executeOnUnhandledException() {
         this.executeOnUnhandledExceptionCustom();
-        this.executeNext();
+        this.runNext();
     }
 
     /**
@@ -53,9 +52,9 @@ public virtual class ChainableFinalizer implements Finalizer {
      */
     protected virtual void executeOnUnhandledExceptionCustom() {}
 
-    protected void executeNext() {
-        if (this.runNext) {
-            ChainableUtility.runChainables(this.chainables, this.passThrough);
+    protected void runNext() {
+        if (this.runNextChainable) {
+            current.runNext();
         }
     }
 }

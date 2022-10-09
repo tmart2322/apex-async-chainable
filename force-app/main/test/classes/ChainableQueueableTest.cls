@@ -28,6 +28,28 @@ public class ChainableQueueableTest {
     }
 
     @IsTest
+    public static void chainableQueueableMultipleSuccessWithChaining() {
+        Test.startTest();
+        new ChainableQueueableSuccess('Test 1')
+            .then(new ChainableQueueableSuccess('Test 2'))
+            .run();
+        Test.stopTest();
+
+        System.assertEquals(2, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert two Chainable_Test__c when called');
+    }
+
+    @IsTest
+    public static void chainableQueueableMultipleSuccessAddChain() {
+        Test.startTest();
+        new ChainableQueueableSuccessAddChain('Test 1')
+            .then(new ChainableQueueableSuccess('Test 3'))
+            .run();
+        Test.stopTest();
+
+        System.assertEquals(3, ChainableTestUtility.getChainableTests().size(), 'Should successfully insert two Chainable_Test__c when called');
+    }
+
+    @IsTest
     public static void chainableQueueablePassThrough() {
         String chainableTestNamePrepend = 'Test';
 

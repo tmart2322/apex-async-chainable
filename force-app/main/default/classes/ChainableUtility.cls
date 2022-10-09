@@ -13,11 +13,11 @@ public class ChainableUtility {
      * @param passThrough Object to pass through to next chainable
      */
     public static void runChainables(List<Chainable> chainables, Object passThrough) {
-        if (!chainables.isEmpty()) {
-            Chainable chainable = chainables.remove(0);
-            chainable.chainables = chainables;
-            chainable.passThrough = passThrough;
-            chainable.run();
+        for (Integer i = 0; i < chainables.size(); i++) {
+            Chainable chainable = chainables[i];
+            chainable.previous = i > 0 ? chainables[i - 1] : null;
+            chainable.next = i < chainables.size() - 1 ? chainables[i + 1] : null;
         }
+        chainables[0].setPassThrough(passThrough).run();
     }
 }

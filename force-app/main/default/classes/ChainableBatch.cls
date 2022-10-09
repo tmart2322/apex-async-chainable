@@ -13,9 +13,9 @@ public abstract class ChainableBatch extends Chainable implements Database.Batch
 
     public void finish(Database.BatchableContext context) {
         this.context = context;
-        Boolean runNext = this.finish();
-        if (runNext) {
-            ChainableUtility.runChainables(this.chainables, this.passThrough);
+        Boolean runNextChainable = this.finish();
+        if (runNextChainable) {
+            this.runNext();
         }
     }
 

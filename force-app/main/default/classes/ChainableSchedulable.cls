@@ -10,8 +10,8 @@ public abstract class ChainableSchedulable extends Chainable implements Schedula
 
     public void execute(SchedulableContext context) {
         this.context = context;
-        execute();
-        ChainableUtility.runChainables(this.chainables, this.passThrough);
+        this.execute();
+        this.runNext();
     }
 
     public override void run() {

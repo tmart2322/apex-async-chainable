@@ -16,14 +16,11 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
      */
     public void execute(QueueableContext context) {
         this.context = context;
-        finalizer.chainables = this.chainables;
-        finalizer.passThrough = this.passThrough;
+        finalizer.current = this;
         System.attachFinalizer(finalizer);
-
-        Boolean runNext = execute();
-        finalizer.runNext = runNext;
-        finalizer.chainables = this.chainables;
-        finalizer.passThrough = this.passThrough;
+        Boolean runNextChainable = this.execute();
+        finalizer.runNextChainable = runNextChainable;
+        finalizer.current = this;
     }
 
     /**
