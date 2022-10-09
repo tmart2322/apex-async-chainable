@@ -2,6 +2,20 @@
 
 This library enables chaining of any number of asynchronous processes (Batch, Queueable, Schedulable) together in a standardized and extensible way.
 
+-   [Apex Async Chainable](#apex-async-chainable)
+    -   [Library Overview](#library-overview)
+        -   [With Chainable](#with-chainable)
+        -   [Without Chainable](#without-chainable)
+    -   [Usage](#usage)
+        -   [Chainable Types](#chainable-types)
+            -   [Queueable](#queueable)
+            -   [Batch](#batch)
+            -   [Schedulable](#schedulable)
+        -   [Other Usage Info](#other-usage-info)
+            -   [Using Pass Through](#using-pass-through)
+            -   [Accessing Queueable, Schedulable, or Batch Context](#accessing-queueable-schedulable-or-batch-context)
+            -   [Adding a Chainable in the Middle of a Chainable Execution](#adding-a-chainable-in-the-middle-of-a-chainable-execution)
+
 ## Library Overview
 
 Chaining asynchronous processes together can be cumbersome in Salesforce. This library aims to make this process simpler by doing the following:
