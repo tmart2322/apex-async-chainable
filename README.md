@@ -7,7 +7,7 @@ Chaining asynchronous processes together can be cumbersome in Salesforce. This l
 * Allows sharing of variables between chain members.
 * Allows both promise-like chaining and list-driven chaining.
 * Allows Batch, Queueable, or Schedulable to be chained.
-* Utilizes finalizers for queueables to ensure the chain can continue even if an uncaught exception is surfaced in the queueable (including uncatchable limit exceptions).
+* Utilizes Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
 ### With Chainable
 Chaining can be accomplished in a promise-like way...
 ```java
@@ -30,7 +30,7 @@ List<Chainable> chainables = new List<Chainables>{
 ChainableUtility.runChainables(chainables);
 ```
 ### Without Chainable
-Without Chainable chaining logic needs to be defined in every asynchronous implementation. This may look like the following... 
+Without Chainable chaining logic is tightly coupled with the business logic and needs to be defined in every asynchronous implementation. This may look like the following... 
 ```java
 class SchedulableImplementation implements Schedulable {
     public void execute(SchedulableContext context) { 
@@ -106,7 +106,10 @@ public class ChainableQueueableCustomWithCustomFinalizer extends ChainableQueuea
 Chainable Batches are created by extending the `ChainableBatch` class.
 ```java
 public class ChainableBatchCustom extends ChainableBatch {
-    protected override Database.QueryLocator start() { ... }
+    protected override Database.QueryLocator start() { 
+        // Start execute logic here
+        ... 
+    }
 
     protected override void execute(List<sObject> scope) {
         // Batch execute logic here
@@ -119,6 +122,20 @@ public class ChainableBatchCustom extends ChainableBatch {
         // Return whether to execute the next Chainable
         return true;
     }
+}
+```
+The default batch size is 200 for `ChainableBatch` implementations. This can be overridden by passing the batch size to the base class' constructor.
+```java
+public class ChainableBatchCustomWithCustomBatchSize extends ChainableBatch {
+    public ChainableBatchCustomWithCustomBatchSize() {
+        super(100); // Sets the batch size to 100
+    }
+
+    protected override Database.QueryLocator start() { ... }
+
+    protected override void execute(List<sObject> scope) { ... }
+
+    protected override Boolean finish() { ... }
 }
 ```
 #### Schedulable
@@ -152,17 +169,18 @@ new SomeChainable().setPassThrough(customObject).run();
 ```java
 ChainableUtility.runChainables(chainables, customObject);
 ```
-Pass Through can be updated at any point in the Chainable execution by directly updating the variable.
+Pass Through can be updated at any point in the Chainable execution by using the setPassThrough method.
 ```java
-this.passThrough = customObject;
+this.setPassThrough(customObject);
 ```
 #### Accessing Queueable, Schedulable, or Batch Context
-The context of each asynchronous process is saved on the Chainable prior to the user-implemented methods. These can be accessed by the `context` variable.
+The context of each asynchronous process is saved on the Chainable prior to the developer-implemented methods. These can be accessed by the `context` variable.
 ```java
+
 QueueableContext context = this.context;
 ```
-#### Adding a Chainable in the middle of a Chainable Execution
-A Chainable can be added in the middle of a Chainable's exection by using the `then` method. This will set the Chainable as the next Chainable to run and the remaining Chainables will be run after.
+#### Adding a Chainable in the Middle of a Chainable Execution
+A Chainable can be added at any point in a Chainable's execution by using the `then` method. This will set the Chainable as the next Chainable to run and the remaining Chainables will be run after.
 ```java
 this.then(new SomeChainable());
 ```
