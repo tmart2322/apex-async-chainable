@@ -11,7 +11,7 @@ Chaining asynchronous processes together can be cumbersome in Salesforce. This l
 ### With Chainable
 Chaining can be accomplished in a promise-like way...
 ```java
-new ScheduledJob().setPassThrough(customObject)
+new ScheduledJob()
     .then(new BatchJob())
     .then(new QueueableJob())
     .then(new AnotherQueueableJob)
@@ -27,7 +27,7 @@ List<Chainable> chainables = new List<Chainables>{
     new AnotherQueueableJob()
   ...
 };
-ChainableUtility.runChainables(chainables, customObject);
+ChainableUtility.runChainables(chainables);
 ```
 ### Without Chainable
 Without Chainable chaining logic needs to be defined in every asynchronous implementation. This may look like the following... 
