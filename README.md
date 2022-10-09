@@ -124,7 +124,7 @@ public class ChainableQueueableCustomWithCustomFinalizer extends ChainableQueuea
 }
 ```
 
-By default, the Finalizer _will not_ execute the next Chainable if there is an uncaught exception in the Queueable. If you'd like to execute the next Chainable when there is an uncaught exception, do the following:
+By default, the Finalizer _will not_ execute the next Chainable if there is an uncaught exception in the Queueable. If you'd like to execute the next Chainable when there is an uncaught exception, pass true to the ChainableFinalizer's constructor.
 
 ```java
 public class ChainableQueueableCustom extends ChainableQueueable {
