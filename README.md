@@ -215,7 +215,7 @@ However, custom execute logic can be written by overriding the `execute` method.
 ```java
 public class ChainableSchedulableCustomWithExecute extends ChainableSchedulable {
     public ChainableSchedulableCustomWithExecute() { ... }
-    public override void execute() {
+    protected override void execute() {
         // Schedulable execute logic here
         ...
     }
