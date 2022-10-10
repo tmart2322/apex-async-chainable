@@ -1,11 +1,11 @@
-# Apex Async Chainable
+# Apex Async Chainable ![Build](https://github.com/tmart2322/apex-async-chainable/actions/workflows/code-coverage.yml/badge.svg) [![codecov](https://codecov.io/gh/tmart2322/apex-async-chainable/branch/master/graph/badge.svg?token=N5GSR94JNX)](https://codecov.io/gh/tmart2322/apex-async-chainable)
 
 <a href="https://githubsfdeploy.herokuapp.com?owner=tmart2322&repo=apex-async-chainable">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
 </a>
 
--   [Apex Async Chainable](#apex-async-chainable)
+-   [Apex Async Chainable !Build [![codecov](https://codecov.io/gh/tmart2322/apex-async-chainable/branch/master/graph/badge.svg?token=N5GSR94JNX)](https://codecov.io/gh/tmart2322/apex-async-chainable)](#apex-async-chainable--)
     -   [Library Overview](#library-overview)
         -   [With Chainable](#with-chainable)
         -   [Without Chainable](#without-chainable)
