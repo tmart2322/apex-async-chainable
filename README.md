@@ -32,7 +32,7 @@ Without this library, chaining asynchronous processes in Salesforce requires tig
 -   Allows sharing of variables between chain members.
 -   Allows both promise-like chaining and list-driven chaining.
 -   Utilizes Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
--   Library is small (<100 lines of testable code)
+-   Lightweight (<100 lines of testable code)
 
 ### With Chainable
 
