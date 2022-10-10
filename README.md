@@ -74,11 +74,11 @@ class SchedulableImplementation implements Schedulable {
 
 ```java
 class BatchImplementation implements Database.Batchable<sObject> {
-    Database.QueryLocator start(BatchableContext context) { ... }
+    public Database.QueryLocator start(BatchableContext context) { ... }
 
-    void execute(BatchableContext context, List<sObject> scope) { ... }
+    public void execute(BatchableContext context, List<sObject> scope) { ... }
 
-    void finish(BatchableContext context) {
+    public void finish(BatchableContext context) {
         // Custom business logic
         ...
         // Run next asynchronous process
@@ -89,7 +89,7 @@ class BatchImplementation implements Database.Batchable<sObject> {
 
 ```java
 class QueueableImplementation implements Queueable {
-    void execute(QueueableContext context) {
+    public void execute(QueueableContext context) {
         // Custom business Logic
         ...
         // Run next asynchronous process
@@ -110,7 +110,7 @@ Chainable Queueables are created by extending the `ChainableQueueable` class.
 
 ```java
 public class ChainableQueueableCustom extends ChainableQueueable {
-    public override Boolean execute() {
+    protected override Boolean execute() {
         // Queueable execute logic here
         ...
         // Return whether to execute the next Chainable
@@ -141,7 +141,7 @@ public class ChainableQueueableCustomWithCustomFinalizer extends ChainableQueuea
         super(new ChainableFinalizerCustom());
     }
 
-    public override Boolean execute() { ... }
+    protected override Boolean execute() { ... }
 }
 ```
 
@@ -153,7 +153,7 @@ public class ChainableQueueableCustom extends ChainableQueueable {
         super(new ChainableFinalizer(true));
     }
 
-    public override Boolean execute() { ... }
+    protected override Boolean execute() { ... }
 }
 ```
 
