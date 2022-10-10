@@ -1,5 +1,10 @@
 # Apex Async Chainable
 
+<a href="https://githubsfdeploy.herokuapp.com?owner=tmart2322&repo=apex-async-chainable">
+  <img alt="Deploy to Salesforce"
+       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
+</a>
+
 -   [Apex Async Chainable](#apex-async-chainable)
     -   [Library Overview](#library-overview)
         -   [With Chainable](#with-chainable)
@@ -18,7 +23,7 @@ This library enables chaining of any number of asynchronous processes (Batch, Qu
 
 ## Library Overview
 
-Chaining asynchronous processes together can be cumbersome in Salesforce. This library aims to make this process simpler by doing the following:
+Without this framework, chaining asynchronous processes in Salesforce requires tightly coupled chaining and business logic implementations. This library aims to make this process simpler by doing the following:
 
 -   Exposes extensible classes that have the chaining logic embedded and surfaces abstract methods for custom business logic.
 -   Allows sharing of variables between chain members.
@@ -118,12 +123,14 @@ Custom Finalizers also be defined by extending the `ChainableFinalizer` class.
 
 ```java
 public class ChainableFinalizerCustom extends ChainableFinalizer {
-    protected override void executeOnSuccessCustom() {
+    protected override void executeOnSuccess() {
         // Custom logic when the Queueable is successful
+        ...
     }
 
-    protected override void executeOnUncaughtExceptionCustom() {
-        // Custom logic when the Queueable has an unchaught exception (including uncatchable limit exceptions)
+    protected override void executeOnUncaughtException() {
+        // Custom logic when the Queueable has an uncaught exception (including uncatchable limit exceptions)
+        ...
     }
 }
 ```
@@ -207,7 +214,7 @@ However, custom execute logic can be written by overriding the `execute` method.
 
 ```java
 public class ChainableSchedulableCustomWithExecute extends ChainableSchedulable {
-    public ChainableSchedulableCustom() { ... }
+    public ChainableSchedulableCustomWithExecute() { ... }
     public override void execute() {
         // Schedulable execute logic here
         ...
