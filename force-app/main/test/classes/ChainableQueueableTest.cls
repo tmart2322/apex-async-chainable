@@ -52,16 +52,19 @@ public class ChainableQueueableTest {
 
     @IsTest
     public static void chainableQueueableMultipleSuccessAddChain() {
+        List<Chainable> chainables = new List<Chainable>{
+            new ChainableQueueableSuccessAddChain('Test 1'),
+            new ChainableQueueableSuccess('Test 3')
+        };
+
         Test.startTest();
-        new ChainableQueueableSuccessAddChain('Test 1')
-            .then(new ChainableQueueableSuccess('Test 3'))
-            .run();
+        ChainableUtility.runChainables(chainables);
         Test.stopTest();
 
         System.assertEquals(
             3,
             ChainableTestUtility.getChainableTests().size(),
-            'Should successfully insert two Chainable_Test__c when called'
+            'Should successfully insert three Chainable_Test__c when called'
         );
     }
 
