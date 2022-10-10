@@ -6,7 +6,7 @@ public class ChainableQueueableRunNext extends ChainableQueueable {
         this.runNext = runNext;
     }
 
-    public override Boolean execute() {
+    protected override Boolean execute() {
         return runNext;
     }
 }

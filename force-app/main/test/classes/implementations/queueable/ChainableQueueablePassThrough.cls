@@ -6,7 +6,7 @@ public class ChainableQueueablePassThrough extends ChainableQueueable {
         this.chainableTestNamePrepend = chainableTestNamePrepend;
     }
 
-    public override Boolean execute() {
+    protected override Boolean execute() {
         ChainableTestUtility.insertChainableTest(
             ChainableTestUtility.joinStrings(
                 this.chainableTestNamePrepend,

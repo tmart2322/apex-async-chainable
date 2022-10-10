@@ -10,7 +10,7 @@ public class ChainableQueueableSuccessCustomFinalizer extends ChainableQueueable
         this.chainableTestName = chainableTestName;
     }
 
-    public override Boolean execute() {
+    protected override Boolean execute() {
         ChainableTestUtility.insertChainableTest(this.chainableTestName);
         return true;
     }

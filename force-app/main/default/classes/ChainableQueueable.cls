@@ -32,10 +32,10 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
 
     // ABSTRACT METHODS
     /**
-     * @description Custom queueable logic implemented by the developer
-     * @return `Boolean` whether to run the next queueable or not
+     * @description Abstract method for execute method logic
+     * @return `Boolean` whether to run the next Chainable
      */
-    public abstract Boolean execute();
+    protected abstract Boolean execute();
 
     // PUBLIC METHODS
     /**
