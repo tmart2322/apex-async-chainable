@@ -74,9 +74,9 @@ class SchedulableImplementation implements Schedulable {
 
 ```java
 class BatchImplementation implements Database.Batchable<sObject> {
-    Iterator<SObject> start(BatchableContext context) { ... }
+    Database.QueryLocator start(BatchableContext context) { ... }
 
-    void execute(BatchableContext context, List<Account> scope) { ... }
+    void execute(BatchableContext context, List<sObject> scope) { ... }
 
     void finish(BatchableContext context) {
         // Custom business logic
