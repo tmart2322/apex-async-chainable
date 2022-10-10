@@ -35,7 +35,7 @@ Without this library, chaining asynchronous processes in Salesforce requires tig
 
 ### With Chainable
 
-Chaining can be accomplished in a promise-like way...
+Chaining can be accomplished in a promise-like approach...
 
 ```java
 new ScheduledJob()
@@ -46,7 +46,7 @@ new ScheduledJob()
     .run();
 ```
 
-...or by providing a list of chainables to run.
+…or a list-driven approach utilizing the library’s `ChainableUtility` class.
 
 ```java
 List<Chainable> chainables = new List<Chainables>{
@@ -102,11 +102,13 @@ class QueueableImplementation implements Queueable {
 
 ## Usage
 
-This provides example impelmentations for each Chainable type. If you're interested in additional implementation examples, see the test classes for each Chainable type.
+This provides example implmentations for each Chainable type. If you're interested in additional implementation examples, see the test classes for each Chainable type.
 
 ### Chainable Types
 
 #### Queueable
+
+![ChainableQueueable Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableQueueableTest.cls)
 
 Chainable Queueables are created by extending the `ChainableQueueable` class.
 
@@ -161,6 +163,8 @@ public class ChainableQueueableCustom extends ChainableQueueable {
 
 #### Batch
 
+![ChainableBatch Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableBatchTest.cls)
+
 Chainable Batches are created by extending the `ChainableBatch` class.
 
 ```java
@@ -201,6 +205,8 @@ public class ChainableBatchWithCustomBatchSize extends ChainableBatch {
 ```
 
 #### Schedulable
+
+![ChainableSchedulable Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableSchedulableTest.cls)
 
 Chainable Schedulables are created by extending the `ChainableSchedulable` class. By default, schedulable classes have no logic and the intent is to chain the next job for any logic necessary.
 
