@@ -3,11 +3,10 @@ public class ChainableFinalizerCustom extends ChainableFinalizer {
     private String chainableTestName;
 
     public ChainableFinalizerCustom(String chainableTestName) {
-        super();
         this.chainableTestName = chainableTestName;
     }
 
-    protected override void executeOnSuccessCustom() {
+    protected override void executeOnSuccess() {
         ChainableTestUtility.insertChainableTest(this.chainableTestName);
     }
 }
