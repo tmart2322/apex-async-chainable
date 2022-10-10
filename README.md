@@ -25,12 +25,12 @@ This library enables chaining of any number of asynchronous processes (Batch, Qu
 
 ## Library Overview
 
-Without this framework, chaining asynchronous processes in Salesforce requires tightly coupled chaining and business logic implementations. This library aims to make this process simpler by doing the following:
+Without this library, chaining asynchronous processes in Salesforce requires tightly coupled chaining and business logic implementations. This library aims to make this process simpler by doing the following:
 
+-   Allows Batch, Queueable, or Schedulable to be chained.
 -   Exposes extensible classes that have the chaining logic embedded and surfaces abstract methods for custom business logic.
 -   Allows sharing of variables between chain members.
 -   Allows both promise-like chaining and list-driven chaining.
--   Allows Batch, Queueable, or Schedulable to be chained.
 -   Utilizes Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
 
 ### With Chainable
@@ -138,8 +138,8 @@ public class ChainableFinalizerCustom extends ChainableFinalizer {
 ```
 
 ```java
-public class ChainableQueueableCustomWithCustomFinalizer extends ChainableQueueable {
-    public ChainableQueueableCustomWithCustomFinalizer() {
+public class ChainableQueueableWithCustomFinalizer extends ChainableQueueable {
+    public ChainableQueueableWithCustomFinalizer() {
         super(new ChainableFinalizerCustom());
     }
 
@@ -187,8 +187,8 @@ public class ChainableBatchCustom extends ChainableBatch {
 The default batch size is 200 for `ChainableBatch` implementations. This can be overridden by passing the batch size to the base class' constructor.
 
 ```java
-public class ChainableBatchCustomWithCustomBatchSize extends ChainableBatch {
-    public ChainableBatchCustomWithCustomBatchSize() {
+public class ChainableBatchWithCustomBatchSize extends ChainableBatch {
+    public ChainableBatchWithCustomBatchSize() {
         super(100); // Sets the batch size to 100
     }
 
@@ -215,8 +215,8 @@ public class ChainableSchedulableCustom extends ChainableSchedulable {
 However, custom execute logic can be written by overriding the `execute` method.
 
 ```java
-public class ChainableSchedulableCustomWithExecute extends ChainableSchedulable {
-    public ChainableSchedulableCustomWithExecute() { ... }
+public class ChainableSchedulableWithExecute extends ChainableSchedulable {
+    public ChainableSchedulableWithExecute() { ... }
     protected override void execute() {
         // Schedulable execute logic here
         ...
