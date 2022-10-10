@@ -108,7 +108,7 @@ This provides example implmentations for each Chainable type. If you're interest
 
 #### Queueable
 
-![ChainableQueueable Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableQueueableTest.cls)
+[ChainableQueueable Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableQueueableTest.cls)
 
 Chainable Queueables are created by extending the `ChainableQueueable` class.
 
@@ -163,7 +163,7 @@ public class ChainableQueueableCustom extends ChainableQueueable {
 
 #### Batch
 
-![ChainableBatch Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableBatchTest.cls)
+[ChainableBatch Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableBatchTest.cls)
 
 Chainable Batches are created by extending the `ChainableBatch` class.
 
@@ -206,7 +206,7 @@ public class ChainableBatchWithCustomBatchSize extends ChainableBatch {
 
 #### Schedulable
 
-![ChainableSchedulable Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableSchedulableTest.cls)
+[ChainableSchedulable Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableSchedulableTest.cls)
 
 Chainable Schedulables are created by extending the `ChainableSchedulable` class. By default, schedulable classes have no logic and the intent is to chain the next job for any logic necessary.
 
