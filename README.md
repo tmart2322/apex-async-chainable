@@ -16,7 +16,7 @@
             -   [Schedulable](#schedulable)
         -   [Other Usage Info](#other-usage-info)
             -   [Using Pass Through](#using-pass-through)
-            -   [Accessing Queueable, Schedulable, or Batch Context](#accessing-queueable-schedulable-or-batch-context)
+            -   [Accessing Queueable, Schedulable, Batch, or Finalizer Context](#accessing-queueable-schedulable-batch-or-finalizer-context)
             -   [Adding a Chainable in the Middle of a Chainable Execution](#adding-a-chainable-in-the-middle-of-a-chainable-execution)
 
 This library enables chaining of any number of asynchronous processes (Batch, Queueable, Schedulable) together in a standardized and extensible way.
@@ -228,7 +228,7 @@ public class ChainableSchedulableCustomWithExecute extends ChainableSchedulable 
 
 Any `Chainable` implementation can access the `passThrough` variable. This persists across Chainables and any updates are reflected in succeeding Chainables.
 
-Pass Through can either be initalized in the promise-like approach by calling...
+Pass Through can either be initalized in the promise-like approach by calling the `setPassThrough` method...
 
 ```java
 new SomeChainable().setPassThrough(customObject).run();
@@ -240,19 +240,21 @@ new SomeChainable().setPassThrough(customObject).run();
 ChainableUtility.runChainables(chainables, customObject);
 ```
 
-Pass Through can be updated at any point in the Chainable execution by using the setPassThrough method.
+Pass Through can be updated at any point in the Chainable execution by using the `setPassThrough` method.
 
 ```java
 this.setPassThrough(customObject);
 ```
 
-#### Accessing Queueable, Schedulable, or Batch Context
+#### Accessing Queueable, Schedulable, Batch, or Finalizer Context
 
 The context of each asynchronous process is saved on the Chainable prior to the developer-implemented methods. These can be accessed by the `context` variable.
 
 ```java
-
-QueueableContext context = this.context;
+QueueableContext context = this.context; // In ChainableQueueable 'execute' method
+SchedulableContext context = this.context; // In ChainableSchedulable 'execute' method
+Database.BatchableContext context = this.context; // In ChainableBatch 'start', 'execute', and 'finish' methods
+FinalizerContext context = this.context; // In ChainableFinalizer 'executeOnSuccess' and 'executeOnUncaughtException' methods
 ```
 
 #### Adding a Chainable in the Middle of a Chainable Execution
