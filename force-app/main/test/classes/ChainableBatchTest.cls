@@ -251,7 +251,7 @@ public class ChainableBatchTest {
         );
         System.assert(
             chainableTestNames.contains(chainableTestNamesForInsert[1]),
-            'Second Chainable_Test__c name should not be updated since runNext is true'
+            'Second Chainable_Test__c name should not be updated since runNext is false'
         );
     }
 }

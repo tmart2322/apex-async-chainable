@@ -28,12 +28,12 @@ public class ChainableSchedulableTest {
         System.assertEquals(
             1,
             scheduledBatches.size(),
-            'One Batch should be scheduled'
+            'One Batch job should be scheduled'
         );
         System.assertEquals(
             'ChainableBatchSuccess',
             scheduledBatches[0].ApexClass.Name,
-            'Batch class should be scheduled'
+            'ChainableBatchSuccess class should be scheduled'
         );
     }
 
@@ -56,12 +56,12 @@ public class ChainableSchedulableTest {
         System.assertEquals(
             1,
             scheduledQueueables.size(),
-            'One Queueable should be scheduled'
+            'One Queueable job should be scheduled'
         );
         System.assertEquals(
             'ChainableQueueableSuccess',
             scheduledQueueables[0].ApexClass.Name,
-            'Batch class should be scheduled'
+            'ChainableQueueableSuccess class should be scheduled'
         );
     }
 }
