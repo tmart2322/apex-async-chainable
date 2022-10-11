@@ -42,7 +42,7 @@ Chaining can be accomplished in a promise-like approach...
 new ScheduledJob()
     .then(new BatchJob())
     .then(new QueueableJob())
-    .then(new AnotherQueueableJob)
+    .then(new AnotherQueueableJob())
     ...
     .run();
 ```
@@ -253,6 +253,12 @@ Pass Through can be updated at any point in the Chainable execution by using the
 
 ```java
 this.setPassThrough(customObject);
+```
+
+Pass Through can be accessed at any point in the Chainable execution by accessing the `passThrough` instance variable.
+
+```java
+Object customObject = this.passThrough;
 ```
 
 #### Accessing Queueable, Schedulable, Batch, or Finalizer Context
