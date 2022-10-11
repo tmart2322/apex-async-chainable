@@ -2,36 +2,19 @@ name: code-coverage
 on: [push, pull_request]
 jobs:
     check:
-        outputs:
-            run_job: ${{ steps.check_files.outputs.run_job }}
         runs-on: ubuntu-latest
+        outputs:
+            files-changed: ${{ steps.check-changed-files.outputs.any_changed }}
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+            - id: check-changed-files
+              name: Get changed files in the force-app/main folder
+              uses: tj-actions/changed-files@v32.0.0
               with:
-                  fetch-depth: 2
-            - name: check modified files
-              id: check_files
-              run: |
-                  echo "=============== List Modified Files ==============="
-                  git diff --name-only HEAD^ HEAD
-
-                  echo "========== Check Paths of Modified Files =========="
-                  git diff --name-only HEAD^ HEAD &gt; files.txt
-                  while IFS= read -r file
-                  do
-                    echo $file
-                    if [[ $file != force-app/main/* ]]; then
-                      echo "This modified file is not under the 'force-app/main' folder."
-                      echo "::set-output name=run_job::false"
-                      break
-                    else
-                      echo "::set-output name=run_job::true"
-                    fi
-                  done &lt; files.txt
+                files: |
+                    force-app/main/**
     build:
         needs: check
-        if: needs.check.outputs.run_job == 'true'
+        if: needs.check.outputs.files-changed == 'true'
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
