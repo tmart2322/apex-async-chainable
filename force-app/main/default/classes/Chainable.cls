@@ -35,11 +35,10 @@ public abstract class Chainable {
      */
     public Chainable then(Chainable next) {
         if (this.next != null) {
-            this.next.then(next);
-        } else {
-            this.next = next;
-            this.next.previous = this;
+            next.then(this.next);
         }
+        this.next = next;
+        this.next.previous = this;
         return this;
     }
 
