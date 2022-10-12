@@ -59,7 +59,7 @@ public virtual class ChainableFinalizer implements Finalizer {
             }
         }
         if (this.runNextChainable) {
-            current.runNext();
+            this.current.runNext();
         }
     }
 }
