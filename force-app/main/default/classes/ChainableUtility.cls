@@ -5,7 +5,7 @@
  */
 public class ChainableUtility {
     /**
-     * @description Converts a list of Chainables to the library's structure for execution
+     * @description Chains and runs a list of Chainables
      * @param chainables List of Chainables to run
      */
     public static void runChainables(List<Chainable> chainables) {
@@ -13,7 +13,7 @@ public class ChainableUtility {
     }
 
     /**
-     * @description Converts a list of Chainables to the library's structure for execution
+     * @description Chains and runs a list of Chainables
      * @param chainables List of Chainables to run
      * @param passThrough Initial Pass Through value
      */
@@ -21,12 +21,12 @@ public class ChainableUtility {
         List<Chainable> chainables,
         Object passThrough
     ) {
-        for (Integer i = 0; i < chainables.size(); i++) {
-            Chainable chainable = chainables[i];
-            chainable.previous = i > 0 ? chainables[i - 1] : null;
-            chainable.next = i < chainables.size() - 1
-                ? chainables[i + 1]
-                : null;
+        Chainable previousChainable;
+        for (Chainable chainable : chainables) {
+            if (previousChainable != null) {
+                previousChainable.then(chainable);
+            }
+            previousChainable = chainable;
         }
         chainables[0].setPassThrough(passThrough).run();
     }
