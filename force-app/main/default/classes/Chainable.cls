@@ -28,8 +28,8 @@ public abstract class Chainable {
 
     // PUBLIC METHODS
     /**
-     * @description Adds the next Chainable to the stack. If next is already defined for the current Chainable
-     * then it will be overridden with the new Chainable and be added as the next item in the stack.
+     * @description Adds the next Chainable to the queue. If next is already defined for the current Chainable
+     * then it will be overridden with the new Chainable and be added as the next item in the queue.
      * @param next the next Chainable to run in the execution
      * @return `Chainable` the instance of this Chainable
      */
@@ -43,7 +43,7 @@ public abstract class Chainable {
     }
 
     /**
-     * @description Will run the next Chainable in the stack (if it exists).
+     * @description Will run the next Chainable in the queue (if it exists).
      */
     public void runNext() {
         if (this.next != null) {

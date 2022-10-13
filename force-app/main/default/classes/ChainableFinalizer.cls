@@ -1,3 +1,8 @@
+/**
+ * @description `ChainableFinalizer` A virtual class for implementing a Finalizer for Queueable Chainables.
+ * @author Tristan Martin
+ * @since October 9th, 2022
+ */
 public virtual class ChainableFinalizer implements Finalizer {
     // INSTANCE VARIABLES
     /**
