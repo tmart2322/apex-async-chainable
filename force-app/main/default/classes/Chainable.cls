@@ -8,16 +8,16 @@ public abstract class Chainable {
     /**
      * next the next Chainable to execute
      */
-    public Chainable next;
+    private Chainable next;
     /**
      * previous the previous Chainable that was executed
      */
-    public Chainable previous;
+    private Chainable previous;
     /**
      * passThrough an object that persists across the Chainable execution.
      * Any updates to this variable will be reflected in succeeding Chainables.
      */
-    public Object passThrough { get; private set; }
+    private Object passThrough;
 
     // ABSTRACT METHODS
     /**
@@ -25,6 +25,13 @@ public abstract class Chainable {
      * @return `void`
      */
     public abstract void run();
+
+    /**
+     * @description INTERNAL USE ONLY - method for synchronizing to the finalizer in ChainableQueueable
+     * @return `void`
+     */
+    protected virtual void synchronize() {
+    }
 
     // PUBLIC METHODS
     /**
@@ -39,6 +46,7 @@ public abstract class Chainable {
         }
         this.next = next;
         this.next.previous = this;
+        this.synchronize();
         return this;
     }
 
@@ -47,7 +55,8 @@ public abstract class Chainable {
      */
     public void runNext() {
         if (this.next != null) {
-            this.next.passThrough = this.passThrough;
+            this.next.setPassThrough(this.getPassThrough());
+            this.synchronize();
             this.next.run();
         }
     }
@@ -59,6 +68,15 @@ public abstract class Chainable {
      */
     public Chainable setPassThrough(Object passThrough) {
         this.passThrough = passThrough;
+        this.synchronize();
         return this;
+    }
+
+    /**
+     * @description Gets the passThrough variable for the current chainable
+     * @return `Object` the passThrough of the current Chainable
+     */
+    public Object getPassThrough() {
+        return this.passThrough;
     }
 }

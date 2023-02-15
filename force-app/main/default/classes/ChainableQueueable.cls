@@ -45,11 +45,9 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
      */
     public void execute(QueueableContext context) {
         this.context = context;
-        this.finalizer.current = this;
+        this.synchronize();
         System.attachFinalizer(finalizer);
-        Boolean runNextChainable = this.execute();
-        this.finalizer.current = this;
-        this.finalizer.runNextChainable = runNextChainable;
+        this.finalizer.runNextChainable = this.execute();
     }
 
     /**
@@ -57,5 +55,13 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
      */
     public override void run() {
         System.enqueueJob(this);
+    }
+
+    // PROTECTED METHODS
+    /**
+     * @description Used to synchronize any updates of the chain to the finalizer
+     */
+    protected override void synchronize() {
+        this.finalizer.current = this;
     }
 }

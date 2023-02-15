@@ -128,13 +128,8 @@ Custom Finalizers also be defined by extending the `ChainableFinalizer` class.
 
 ```java
 public class ChainableFinalizerCustom extends ChainableFinalizer {
-    protected override void executeOnSuccess() {
-        // Custom logic when the Queueable is successful
-        ...
-    }
-
-    protected override void executeOnUncaughtException() {
-        // Custom logic when the Queueable has an uncaught exception (including uncatchable limit exceptions)
+    protected override void execute() {
+        // Custom logic when the Finalizer executes
         ...
     }
 }
@@ -258,7 +253,7 @@ this.setPassThrough(customObject);
 Pass Through can be accessed at any point in the Chainable execution by accessing the `passThrough` instance variable.
 
 ```java
-Object customObject = this.passThrough;
+Object customObject = this.getPassThrough();
 ```
 
 #### Accessing Queueable, Schedulable, Batch, or Finalizer Context
@@ -269,7 +264,7 @@ The context of each asynchronous process is saved on the Chainable prior to the 
 QueueableContext context = this.context; // In ChainableQueueable 'execute' method
 SchedulableContext context = this.context; // In ChainableSchedulable 'execute' method
 Database.BatchableContext context = this.context; // In ChainableBatch 'start', 'execute', and 'finish' methods
-FinalizerContext context = this.context; // In ChainableFinalizer 'executeOnSuccess' and 'executeOnUncaughtException' methods
+FinalizerContext context = this.context; // In ChainableFinalizer 'execute' method
 ```
 
 #### Adding a Chainable in the Middle of a Chainable Execution

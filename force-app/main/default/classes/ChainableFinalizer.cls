@@ -36,33 +36,20 @@ public virtual class ChainableFinalizer implements Finalizer {
 
     // VIRTUAL METHODS
     /**
-     * @description called when the queueable completed successfully
+     * @description Abstract method for execute method logic
      */
-    protected virtual void executeOnSuccess() {
-    }
-
-    /**
-     * @description called when the queueable failed due to an uncaught exception
-     */
-    protected virtual void executeOnUnhandledException() {
+    protected virtual void execute() {
     }
 
     // PUBLIC METHODS
     /**
-     * Overrides the default execute method to call the executeOnSuccess or executeOnUnhandledException
+     * Overrides the default execute method to call the custom
      * virtual methods which can be overriden by the user
      * @param context
      */
     public void execute(FinalizerContext context) {
         this.context = context;
-        switch on context.getResult() {
-            when SUCCESS {
-                executeOnSuccess();
-            }
-            when UNHANDLED_EXCEPTION {
-                executeOnUnhandledException();
-            }
-        }
+        this.execute();
         if (this.runNextChainable) {
             this.current.runNext();
         }
