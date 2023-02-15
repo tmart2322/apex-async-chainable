@@ -14,7 +14,7 @@ public class ChainableBatchPassThrough extends ChainableBatch {
 
     protected override void execute(List<sObject> scope) {
         Chainable_Test__c chainableTest = ((List<Chainable_Test__c>) scope)[0];
-        String chainablePassThrough = String.valueOf(this.passThrough);
+        String chainablePassThrough = String.valueOf(this.getPassThrough());
         String updatedChainableTestName = ChainableTestUtility.joinStrings(
             chainableTest.Name,
             chainablePassThrough
@@ -24,7 +24,7 @@ public class ChainableBatchPassThrough extends ChainableBatch {
             updatedChainableTestName
         );
 
-        this.setPassThrough((Integer) this.passThrough + 1);
+        this.setPassThrough((Integer) this.getPassThrough() + 1);
     }
 
     protected override Boolean finish() {

@@ -10,10 +10,10 @@ public class ChainableQueueablePassThrough extends ChainableQueueable {
         ChainableTestUtility.insertChainableTest(
             ChainableTestUtility.joinStrings(
                 this.chainableTestNamePrepend,
-                String.valueOf((Integer) this.passThrough)
+                String.valueOf((Integer) this.getPassThrough())
             )
         );
-        this.setPassThrough((Integer) this.passThrough + 1);
+        this.setPassThrough((Integer) this.getPassThrough() + 1);
         return true;
     }
 }
