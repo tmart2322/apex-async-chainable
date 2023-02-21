@@ -8,16 +8,16 @@ public class ChainableSchedulableTest {
         Chainable_Test__c chainableTestForInsert = ChainableTestUtility.insertChainableTests(
             chainableTestNamesForInsert
         )[0];
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableSchedulableCustom(),
-            new ChainableBatchSuccess(
-                chainableTestForInsert.Id,
-                CHAINABLE_TEST_NAME_APPEND
-            )
-        };
 
         Test.startTest();
-        ChainableUtility.runChainables(chainables);
+        new ChainableSchedulableCustom()
+            .then(
+                new ChainableBatchSuccess(
+                    chainableTestForInsert.Id,
+                    CHAINABLE_TEST_NAME_APPEND
+                )
+            )
+            .run();
         Test.stopTest();
 
         List<AsyncApexJob> scheduledBatches = [
@@ -39,13 +39,10 @@ public class ChainableSchedulableTest {
 
     @IsTest
     public static void chainableSchedulableWithQueueable() {
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableSchedulableCustom(),
-            new ChainableQueueableSuccess('Test 1')
-        };
-
         Test.startTest();
-        ChainableUtility.runChainables(chainables);
+        new ChainableSchedulableCustom()
+            .then(new ChainableQueueableSuccess('Test 1'))
+            .run();
         Test.stopTest();
 
         List<AsyncApexJob> scheduledQueueables = [

@@ -18,7 +18,7 @@
             -   [Schedulable](#schedulable)
         -   [Other Usage Info](#other-usage-info)
             -   [Using Pass Through](#using-pass-through)
-            -   [Accessing Queueable, Schedulable, Batch, or Finalizer Context](#accessing-queueable-schedulable-batch-or-finalizer-context)
+            -   [Setting Max Depth](#setting-max-depth)
             -   [Adding a Chainable in the Middle of a Chainable Execution](#adding-a-chainable-in-the-middle-of-a-chainable-execution)
 
 This library enables chaining of any number of asynchronous processes (Batch, Queueable, Schedulable) together in a standardized and extensible way.
@@ -57,7 +57,7 @@ List<Chainable> chainables = new List<Chainables>{
     new AnotherQueueableJob()
     ...
 };
-ChainableUtility.runChainables(chainables);
+ChainableUtility.chain(chainables).run();
 ```
 
 ### Without Chainable
@@ -238,10 +238,10 @@ Pass Through can either be initalized in the promise-like approach by calling th
 new SomeChainable().setPassThrough(customObject).run();
 ```
 
-... or by passing it as the second parameter in the list-driven approach.
+... or by calling after calling `setPassThrough` after `chain` is called in `ChainableUtility`
 
 ```java
-ChainableUtility.runChainables(chainables, customObject);
+ChainableUtility.chain(chainables).setPassThrough(customObject).run();
 ```
 
 Pass Through can be updated at any point in the Chainable execution by using the `setPassThrough` method.
@@ -256,6 +256,21 @@ Pass Through can be accessed at any point in the Chainable execution by accessin
 Object customObject = this.getPassThrough();
 ```
 
+#### Setting Max Depth
+
+There is a risk of infinite recursion if additional jobs are chained within a chainable without an end case defined. In this case, you can use set the maximum depth which will stop the chainable execution at that depth.
+
+Max depth can either be initialized in the promise-like approach by calling the `setMaxDepth` method...
+
+```java
+new SomeChainable().setMaxDepth(depth).run();
+```
+
+... or by calling after calling `setMaxDepth` after `chain` is called in `ChainableUtility`
+
+````java
+ChainableUtility.chain(chainables).setMaxDepth(depth).run();
+
 #### Accessing Queueable, Schedulable, Batch, or Finalizer Context
 
 The context of each asynchronous process is saved on the Chainable prior to the developer-implemented methods. These can be accessed by the `context` variable.
@@ -265,7 +280,7 @@ QueueableContext context = this.context; // In ChainableQueueable 'execute' meth
 SchedulableContext context = this.context; // In ChainableSchedulable 'execute' method
 Database.BatchableContext context = this.context; // In ChainableBatch 'start', 'execute', and 'finish' methods
 FinalizerContext context = this.context; // In ChainableFinalizer 'execute' method
-```
+````
 
 #### Adding a Chainable in the Middle of a Chainable Execution
 

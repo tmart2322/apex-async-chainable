@@ -2,12 +2,8 @@
 public class ChainableQueueableTest {
     @IsTest
     public static void chainableQueueableSingleSuccess() {
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableSuccess('Test 1')
-        };
-
         Test.startTest();
-        ChainableUtility.runChainables(chainables);
+        new ChainableQueueableSuccess('Test 1').run();
         Test.stopTest();
 
         System.assertEquals(
@@ -19,24 +15,6 @@ public class ChainableQueueableTest {
 
     @IsTest
     public static void chainableQueueableMultipleSuccess() {
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableSuccess('Test 1'),
-            new ChainableQueueableSuccess('Test 2')
-        };
-
-        Test.startTest();
-        ChainableUtility.runChainables(chainables);
-        Test.stopTest();
-
-        System.assertEquals(
-            2,
-            ChainableTestUtility.getChainableTests().size(),
-            'Should successfully insert two Chainable_Test__c when called'
-        );
-    }
-
-    @IsTest
-    public static void chainableQueueableMultipleSuccessWithChaining() {
         Test.startTest();
         new ChainableQueueableSuccess('Test 1')
             .then(new ChainableQueueableSuccess('Test 2'))
@@ -52,13 +30,10 @@ public class ChainableQueueableTest {
 
     @IsTest
     public static void chainableQueueableMultipleSuccessAddChain() {
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableSuccessAddChain('Test 1'),
-            new ChainableQueueableSuccess('Test 3')
-        };
-
         Test.startTest();
-        ChainableUtility.runChainables(chainables);
+        new ChainableQueueableSuccessAddChain('Test 1')
+            .then(new ChainableQueueableSuccess('Test 3'))
+            .run();
         Test.stopTest();
 
         System.assertEquals(
@@ -70,15 +45,13 @@ public class ChainableQueueableTest {
 
     @IsTest
     public static void chainableQueueablePassThrough() {
-        String chainableTestNamePrepend = 'Test';
-
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueablePassThrough(chainableTestNamePrepend),
-            new ChainableQueueablePassThrough(chainableTestNamePrepend)
-        };
+        final String chainableTestNamePrepend = 'Test';
 
         Test.startTest();
-        ChainableUtility.runChainables(chainables, 1);
+        new ChainableQueueablePassThrough(chainableTestNamePrepend)
+            .setPassThrough(1)
+            .then(new ChainableQueueablePassThrough(chainableTestNamePrepend))
+            .run();
         Test.stopTest();
 
         List<Chainable_Test__c> chainableTests = ChainableTestUtility.getChainableTests();
@@ -106,14 +79,27 @@ public class ChainableQueueableTest {
     }
 
     @IsTest
-    public static void chainableQueueableRunNextTrue() {
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableRunNext(true),
-            new ChainableQueueableSuccess('Test')
-        };
-
+    public static void chainableQueueableMaxDepth() {
         Test.startTest();
-        ChainableUtility.runChainables(chainables);
+        new ChainableQueueableSuccess('Test 1')
+            .setMaxDepth(1)
+            .then(new ChainableQueueableSuccess('Test 2'))
+            .run();
+        Test.stopTest();
+
+        System.assertEquals(
+            1,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should only insert one Chainable as the maxDepth is reached'
+        );
+    }
+
+    @IsTest
+    public static void chainableQueueableRunNextTrue() {
+        Test.startTest();
+        new ChainableQueueableRunNext(true)
+            .then(new ChainableQueueableSuccess('Test'))
+            .run();
         Test.stopTest();
 
         System.assertEquals(
@@ -125,13 +111,10 @@ public class ChainableQueueableTest {
 
     @IsTest
     public static void chainableQueueableRunNextFalse() {
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableRunNext(false),
-            new ChainableQueueableSuccess('Test')
-        };
-
         Test.startTest();
-        ChainableUtility.runChainables(chainables);
+        new ChainableQueueableRunNext(false)
+            .then(new ChainableQueueableSuccess('Test'))
+            .run();
         Test.stopTest();
 
         System.assertEquals(
@@ -145,18 +128,15 @@ public class ChainableQueueableTest {
     public static void chainableQueueableCustomFinalizer() {
         final String CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME = 'Custom Finalizer Test';
 
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableSuccessCustomFinalizer(
+        Test.startTest();
+        new ChainableQueueableSuccessCustomFinalizer(
                 'Test',
                 new ChainableFinalizerCustom(
                     CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME
                 )
-            ),
-            new ChainableQueueableSuccess('Test')
-        };
-
-        Test.startTest();
-        ChainableUtility.runChainables(chainables);
+            )
+            .then(new ChainableQueueableSuccess('Test'))
+            .run();
         Test.stopTest();
 
         List<Chainable_Test__c> chainableTests = ChainableTestUtility.getChainableTests();
@@ -181,14 +161,11 @@ public class ChainableQueueableTest {
      */
     @IsTest
     public static void chainableQueueableFinalizerErrorHandlingCoverage() {
-        List<Chainable> chainables = new List<Chainable>{
-            new ChainableQueueableError(),
-            new ChainableQueueableSuccess('Test')
-        };
-
         try {
             Test.startTest();
-            ChainableUtility.runChainables(chainables);
+            new ChainableQueueableError()
+                .then(new ChainableQueueableSuccess('Test'))
+                .run();
             Test.stopTest();
         } catch (Exception e) {
         }
