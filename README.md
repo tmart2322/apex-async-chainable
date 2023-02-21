@@ -251,7 +251,7 @@ Pass Through can be updated at any point in the Chainable execution by using the
 this.setPassThrough(customObject);
 ```
 
-Pass Through can be accessed at any point in the Chainable execution by accessing the `passThrough` instance variable.
+Pass Through can be accessed at any point in the Chainable execution by using the `getPassThrough` method.
 
 ```java
 Object customObject = this.getPassThrough();
