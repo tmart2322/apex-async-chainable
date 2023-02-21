@@ -6,18 +6,38 @@
 public abstract class Chainable {
     // INSTANCE VARIABLES
     /**
-     * next the next Chainable to execute
+     * `next` the next Chainable to execute
      */
+    @TestVisible
     private Chainable next;
     /**
-     * previous the previous Chainable that was executed
+     * `previous` the previous Chainable that was executed
      */
     private Chainable previous;
     /**
-     * passThrough an object that persists across the Chainable execution.
+     * `passThrough` an object that persists across the Chainable execution.
      * Any updates to this variable will be reflected in succeeding Chainables.
      */
     private Object passThrough;
+    /**
+     * `depth` represents the current depth of the chain (0 indexed).
+     * This variable is incremented by 1 for each succeeding Chainable.
+     */
+    private Integer depth;
+    /**
+     * `maxDepth` If < 1, chain will run indefinitely. If >= 1, chain will end when depth + 1 = maxDepth.
+     * Any updates to this variable will be reflected in succeeding Chainables.
+     */
+    private Integer maxDepth;
+
+    // CONSTRUCTORS
+    /**
+     * @description Used to initialize depth and maxDepth on the Chainable
+     */
+    public Chainable() {
+        this.depth = 0;
+        this.maxDepth = 0;
+    }
 
     // ABSTRACT METHODS
     /**
@@ -26,8 +46,9 @@ public abstract class Chainable {
      */
     public abstract void run();
 
+    // VIRTUAL METHODS
     /**
-     * @description INTERNAL USE ONLY - method for synchronizing to the finalizer in ChainableQueueable
+     * @description Virtual method used for any synchronization needed for Chainables
      * @return `void`
      */
     protected virtual void synchronize() {
@@ -54,8 +75,13 @@ public abstract class Chainable {
      * @description Will run the next Chainable in the queue (if it exists).
      */
     public void runNext() {
+        if (this.maxDepth > 0 && this.depth + 1 >= this.maxDepth) {
+            return;
+        }
         if (this.next != null) {
             this.next.setPassThrough(this.getPassThrough());
+            this.next.setMaxDepth(this.getMaxDepth());
+            this.next.setDepth(this.getDepth() + 1);
             this.synchronize();
             this.next.run();
         }
@@ -73,10 +99,38 @@ public abstract class Chainable {
     }
 
     /**
-     * @description Gets the passThrough variable for the current chainable
+     * @description Gets the passThrough variable for the current Chainable
      * @return `Object` the passThrough of the current Chainable
      */
     public Object getPassThrough() {
         return this.passThrough;
+    }
+
+    /**
+     * @description Gets the maxDepth variable for the current Chainable
+     * @return `Integer` the maxDepth of the current Chainable
+     */
+    public Integer getMaxDepth() {
+        return this.maxDepth;
+    }
+
+    /**
+     * @description Sets the maxDepth variable for the current Chainable
+     * @return `Chainable` the instance of this Chainable
+     */
+    public Chainable setMaxDepth(Integer maxDepth) {
+        this.maxDepth = maxDepth;
+        return this;
+    }
+
+    // PROTECTED METHODS
+    protected Integer getDepth() {
+        return this.depth;
+    }
+
+    // PRIVATE METHODS
+    private Chainable setDepth(Integer depth) {
+        this.depth = depth;
+        return this;
     }
 }

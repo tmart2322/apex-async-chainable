@@ -1,26 +1,14 @@
 /**
- * @description `ChainableUtility` A utility class enables list-driven chaining.
+ * @description `ChainableUtility` A utility class that enables list-driven chaining.
  * @author Tristan Martin
  * @since October 9th, 2022
  */
 public class ChainableUtility {
     /**
-     * @description Chains and runs a list of Chainables
-     * @param chainables List of Chainables to run
+     * @description Chains a list of chainables and returns the first item in the Chain
+     * @param chainables List of Chainables to chain
      */
-    public static void runChainables(List<Chainable> chainables) {
-        runChainables(chainables, null);
-    }
-
-    /**
-     * @description Chains and runs a list of Chainables
-     * @param chainables List of Chainables to run
-     * @param passThrough Initial Pass Through value
-     */
-    public static void runChainables(
-        List<Chainable> chainables,
-        Object passThrough
-    ) {
+    public static Chainable chain(List<Chainable> chainables) {
         Chainable previousChainable;
         for (Chainable chainable : chainables) {
             if (previousChainable != null) {
@@ -28,6 +16,6 @@ public class ChainableUtility {
             }
             previousChainable = chainable;
         }
-        chainables[0].setPassThrough(passThrough).run();
+        return chainables[0];
     }
 }

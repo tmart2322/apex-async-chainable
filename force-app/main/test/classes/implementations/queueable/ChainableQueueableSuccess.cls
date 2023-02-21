@@ -10,4 +10,8 @@ public class ChainableQueueableSuccess extends ChainableQueueable {
         ChainableTestUtility.insertChainableTest(this.chainableTestName);
         return true;
     }
+
+    public String getChainableTestName() {
+        return this.chainableTestName;
+    }
 }
