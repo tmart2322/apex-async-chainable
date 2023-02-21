@@ -19,6 +19,7 @@
         -   [Other Usage Info](#other-usage-info)
             -   [Using Pass Through](#using-pass-through)
             -   [Setting Max Depth](#setting-max-depth)
+            -   [Accessing Queueable, Schedulable, Batch, or Finalizer Context](#accessing-queueable-schedulable-batch-or-finalizer-context)
             -   [Adding a Chainable in the Middle of a Chainable Execution](#adding-a-chainable-in-the-middle-of-a-chainable-execution)
 
 This library enables chaining of any number of asynchronous processes (Batch, Queueable, Schedulable) together in a standardized and extensible way.
@@ -268,8 +269,9 @@ new SomeChainable().setMaxDepth(depth).run();
 
 ... or by calling after calling `setMaxDepth` after `chain` is called in `ChainableUtility`
 
-````java
+```java
 ChainableUtility.chain(chainables).setMaxDepth(depth).run();
+```
 
 #### Accessing Queueable, Schedulable, Batch, or Finalizer Context
 
@@ -280,7 +282,7 @@ QueueableContext context = this.context; // In ChainableQueueable 'execute' meth
 SchedulableContext context = this.context; // In ChainableSchedulable 'execute' method
 Database.BatchableContext context = this.context; // In ChainableBatch 'start', 'execute', and 'finish' methods
 FinalizerContext context = this.context; // In ChainableFinalizer 'execute' method
-````
+```
 
 #### Adding a Chainable in the Middle of a Chainable Execution
 
