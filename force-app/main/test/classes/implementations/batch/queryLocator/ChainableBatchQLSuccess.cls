@@ -1,9 +1,9 @@
 @IsTest
-public class ChainableBatchSuccess extends ChainableBatch {
+public class ChainableBatchQLSuccess extends ChainableBatchQueryLocator {
     private Id chainableTestId;
     private String chainableTestNameAppend;
 
-    public ChainableBatchSuccess(
+    public ChainableBatchQLSuccess(
         Id chainableTestId,
         String chainableTestNameAppend
     ) {

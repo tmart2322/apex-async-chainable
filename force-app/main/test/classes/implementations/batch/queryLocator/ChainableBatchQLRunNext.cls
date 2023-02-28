@@ -1,9 +1,9 @@
 @IsTest
-public class ChainableBatchRunNext extends ChainableBatch {
+public class ChainableBatchQLRunNext extends ChainableBatchQueryLocator {
     private Id chainableTestId;
     private Boolean runNext;
 
-    public ChainableBatchRunNext(Id chainableTestId, Boolean runNext) {
+    public ChainableBatchQLRunNext(Id chainableTestId, Boolean runNext) {
         this.chainableTestId = chainableTestId;
         this.runNext = runNext;
     }

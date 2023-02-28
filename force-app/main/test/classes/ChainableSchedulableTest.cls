@@ -12,7 +12,7 @@ public class ChainableSchedulableTest {
         Test.startTest();
         new ChainableSchedulableCustom()
             .then(
-                new ChainableBatchSuccess(
+                new ChainableBatchQLSuccess(
                     chainableTestForInsert.Id,
                     CHAINABLE_TEST_NAME_APPEND
                 )
@@ -31,9 +31,9 @@ public class ChainableSchedulableTest {
             'One Batch job should be scheduled'
         );
         System.assertEquals(
-            'ChainableBatchSuccess',
+            'ChainableBatchQLSuccess',
             scheduledBatches[0].ApexClass.Name,
-            'ChainableBatchSuccess class should be scheduled'
+            'ChainableBatchQLSuccess class should be scheduled'
         );
     }
 
