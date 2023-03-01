@@ -8,10 +8,9 @@ public abstract class Chainable {
     /**
      * `next` the next Chainable to execute
      */
-    @TestVisible
     private Chainable next;
     /**
-     * `previous` the previous Chainable that was executed
+     * `previous` the previous Chainable executed
      */
     private Chainable previous;
     /**
@@ -88,6 +87,14 @@ public abstract class Chainable {
     }
 
     /**
+     * @description Gets the passThrough variable for the current Chainable
+     * @return `Object` the passThrough of the current Chainable
+     */
+    public Object getPassThrough() {
+        return this.passThrough;
+    }
+
+    /**
      * @description Sets the passThrough variable for the current Chainable.
      * @param passThrough Object value to set
      * @return `Chainable` the instance of this Chainable
@@ -96,14 +103,6 @@ public abstract class Chainable {
         this.passThrough = passThrough;
         this.synchronize();
         return this;
-    }
-
-    /**
-     * @description Gets the passThrough variable for the current Chainable
-     * @return `Object` the passThrough of the current Chainable
-     */
-    public Object getPassThrough() {
-        return this.passThrough;
     }
 
     /**
@@ -120,17 +119,33 @@ public abstract class Chainable {
      */
     public Chainable setMaxDepth(Integer maxDepth) {
         this.maxDepth = maxDepth;
+        this.synchronize();
         return this;
-    }
-
-    // PROTECTED METHODS
-    protected Integer getDepth() {
-        return this.depth;
     }
 
     // PRIVATE METHODS
-    private Chainable setDepth(Integer depth) {
+    /**
+     * @description Gets the depth variable for the current Chainable
+     * @return  `Integer`
+     */
+    private Integer getDepth() {
+        return this.depth;
+    }
+
+    /**
+     * @description Sets the depth variable for the current Chainable
+     * @param depth
+     */
+    private void setDepth(Integer depth) {
         this.depth = depth;
-        return this;
+    }
+
+    /**
+     * Used to test that the chain is properly set
+     * @return  `Chainable`
+     */
+    @TestVisible
+    private Chainable getNext() {
+        return this.next;
     }
 }

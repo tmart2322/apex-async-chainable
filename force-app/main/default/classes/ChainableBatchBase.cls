@@ -1,16 +1,27 @@
+/**
+ * @description `ChainableSchedulable` Abstract base class for QueryLocator and Iterable ChainableBatch
+ * @author Tristan Martin
+ * @since October 9th, 2022
+ */
 public abstract class ChainableBatchBase extends Chainable implements Database.Stateful, Database.AllowsCallouts {
     // STATIC VARIABLES
+    /**
+     * DEFAULT_BATCH_SIZE Represents the default batch size used in the inheriting classes
+     */
     public static final Integer DEFAULT_BATCH_SIZE = 200;
 
     // INSTANCE VARIABLES
     /**
      * context the BatchableContext of the Batch
      */
-    protected Database.BatchableContext context { get; protected set; }
+    protected Database.BatchableContext context {
+        protected get;
+        protected set;
+    }
     /**
      * batchSize the batch size of the Batch
      */
-    protected Integer batchSize { get; private set; }
+    protected Integer batchSize { protected get; private set; }
 
     // CONSTRUCTORS
     /**

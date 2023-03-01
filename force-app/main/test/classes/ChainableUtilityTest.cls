@@ -14,7 +14,7 @@ public class ChainableUtilityTest {
         ChainableQueueableSuccess chainable1 = (ChainableQueueableSuccess) ChainableUtility.chain(
             chainables
         );
-        ChainableQueueableSuccess chainable2 = (ChainableQueueableSuccess) chainable1.next;
+        ChainableQueueableSuccess chainable2 = (ChainableQueueableSuccess) chainable1.getNext();
         Test.stopTest();
 
         System.assertEquals(

@@ -1,7 +1,12 @@
+/**
+ * @description `ChainableSchedulable` An abstract class for implementing an Iterable Batch Chainable
+ * @author Tristan Martin
+ * @since October 9th, 2022
+ */
 public abstract class ChainableBatchIterable extends ChainableBatchBase implements Database.Batchable<Object> {
     // INSTANCE VARIABLES
     /**
-     * iteratorType Represents the Type of the iterator in the batch
+     * iteratorType the Type of the iterator returned from the start method
      */
     private Type iteratorType;
 
