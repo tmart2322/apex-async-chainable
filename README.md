@@ -239,8 +239,8 @@ public class ChainableBatchIteratorCustom extends ChainableBatchIterator {
 The default batch size is 200 for `ChainableBatchIterable` implementations. This can be overridden by passing the batch size to the base class' constructor.
 
 ```java
-public class ChainableBatchWithCustomBatchSize extends ChainableBatchIterable {
-    public ChainableBatchIteratorCustom() {
+public class ChainableBatchIterableWithCustomBatchSize extends ChainableBatchIterable {
+    public ChainableBatchIterableWithCustomBatchSize() {
         super(ITERATOR_TYPE.class, 100); // Sets the batch size to 100
     }
 
