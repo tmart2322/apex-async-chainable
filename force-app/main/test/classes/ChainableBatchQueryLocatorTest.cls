@@ -1,7 +1,7 @@
 @IsTest
-public class ChainableBatchTest {
+public class ChainableBatchQueryLocatorTest {
     @IsTest
-    public static void chainableBatchSingleSuccess() {
+    public static void chainableBatchQueryLocatorSingleSuccess() {
         final String CHAINABLE_TEST_NAME_APPEND = 'Append';
 
         List<String> chainableTestNamesForInsert = new List<String>{ 'Test' };
@@ -10,7 +10,7 @@ public class ChainableBatchTest {
         )[0];
 
         Test.startTest();
-        new ChainableBatchSuccess(
+        new ChainableBatchQLSuccess(
                 chainableTestForInsert.Id,
                 CHAINABLE_TEST_NAME_APPEND
             )
@@ -33,7 +33,7 @@ public class ChainableBatchTest {
     }
 
     @IsTest
-    public static void chainableBatchMultipleSuccess() {
+    public static void chainableBatchQueryLocatorMultipleSuccess() {
         final String CHAINABLE_TEST_NAME_APPEND = 'Append';
 
         List<String> chainableTestNamesForInsert = new List<String>{
@@ -45,12 +45,12 @@ public class ChainableBatchTest {
         );
 
         Test.startTest();
-        new ChainableBatchSuccess(
+        new ChainableBatchQLSuccess(
                 chainableTestsForInsert[0].Id,
                 CHAINABLE_TEST_NAME_APPEND
             )
             .then(
-                new ChainableBatchSuccess(
+                new ChainableBatchQLSuccess(
                     chainableTestsForInsert[1].Id,
                     CHAINABLE_TEST_NAME_APPEND
                 )
@@ -83,7 +83,7 @@ public class ChainableBatchTest {
     }
 
     @IsTest
-    public static void chainableBatchPassThrough() {
+    public static void chainableBatchQueryLocatorPassThrough() {
         List<String> chainableTestNamesForInsert = new List<String>{
             'Test',
             'Test'
@@ -93,9 +93,11 @@ public class ChainableBatchTest {
         );
 
         Test.startTest();
-        new ChainableBatchPassThrough(chainableTestsForInsert[0].Id)
+        new ChainableBatchQLPassThrough(chainableTestsForInsert[0].Id)
             .setPassThrough(1)
-            .then(new ChainableBatchPassThrough(chainableTestsForInsert[1].Id))
+            .then(
+                new ChainableBatchQLPassThrough(chainableTestsForInsert[1].Id)
+            )
             .run();
         Test.stopTest();
 
@@ -124,7 +126,7 @@ public class ChainableBatchTest {
     }
 
     @IsTest
-    public static void chainableBatchRunNextTrue() {
+    public static void chainableBatchQueryLocatorRunNextTrue() {
         final String CHAINABLE_TEST_NAME_APPEND = 'Append';
 
         List<String> chainableTestNamesForInsert = new List<String>{
@@ -136,9 +138,9 @@ public class ChainableBatchTest {
         );
 
         Test.startTest();
-        new ChainableBatchRunNext(chainableTestsForInsert[0].Id, true)
+        new ChainableBatchQLRunNext(chainableTestsForInsert[0].Id, true)
             .then(
-                new ChainableBatchSuccess(
+                new ChainableBatchQLSuccess(
                     chainableTestsForInsert[1].Id,
                     CHAINABLE_TEST_NAME_APPEND
                 )
@@ -166,7 +168,7 @@ public class ChainableBatchTest {
     }
 
     @IsTest
-    public static void chainableBatchRunNextFalse() {
+    public static void chainableBatchQueryLocatorRunNextFalse() {
         final String CHAINABLE_TEST_NAME_APPEND = 'Append';
 
         List<String> chainableTestNamesForInsert = new List<String>{
@@ -178,9 +180,9 @@ public class ChainableBatchTest {
         );
 
         Test.startTest();
-        new ChainableBatchRunNext(chainableTestsForInsert[0].Id, false)
+        new ChainableBatchQLRunNext(chainableTestsForInsert[0].Id, false)
             .then(
-                new ChainableBatchSuccess(
+                new ChainableBatchQLSuccess(
                     chainableTestsForInsert[1].Id,
                     CHAINABLE_TEST_NAME_APPEND
                 )

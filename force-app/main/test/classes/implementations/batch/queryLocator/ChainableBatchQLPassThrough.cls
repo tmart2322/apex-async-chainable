@@ -1,8 +1,8 @@
 @IsTest
-public class ChainableBatchPassThrough extends ChainableBatch {
+public class ChainableBatchQLPassThrough extends ChainableBatchQueryLocator {
     private Id chainableTestId;
 
-    public ChainableBatchPassThrough(Id chainableTestId) {
+    public ChainableBatchQLPassThrough(Id chainableTestId) {
         this.chainableTestId = chainableTestId;
     }
 
