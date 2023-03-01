@@ -30,12 +30,14 @@ This library enables chaining of any number of asynchronous processes (Batch, Qu
 
 Without this library, chaining asynchronous processes in Salesforce requires tightly coupled chaining and business logic implementations. This library aims to make this process simpler by doing the following:
 
--   Allows Batch, Queueable, or Schedulable to be chained.
--   Exposes extensible classes that have the chaining logic embedded and surfaces abstract methods for custom business logic.
--   Allows sharing of variables between chain members.
--   Allows both promise-like chaining and list-driven chaining.
--   Utilizes Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
--   Lightweight (<100 lines of testable code)
+- Allows Batch, Queueable, or Schedulable to be chained.
+- Exposes extensible classes that have the chaining logic embedded and surfaces abstract methods for custom business logic.
+- Allows sharing of variables between chain members.
+- Allows both promise-like chaining and list-driven chaining.
+- Utilizes Transaction Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
+- Supports both Iterable and QueryLocator Batch types
+- Allows a max depth to be defined to avoid the risk of infinite recursive chaining
+- Lightweight (<100 lines of testable code)
 
 ### With Chainable
 
