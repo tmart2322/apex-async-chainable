@@ -164,6 +164,7 @@ public class ChainableQueueableTest {
         try {
             Test.startTest();
             new ChainableQueueableError()
+                .setRunNextOnUncaughtException(true)
                 .then(new ChainableQueueableSuccess('Test'))
                 .run();
             Test.stopTest();

@@ -6,7 +6,7 @@ public class ChainableFinalizerCustom extends ChainableFinalizer {
         this.chainableTestName = chainableTestName;
     }
 
-    protected override void execute() {
+    protected override Boolean execute() {
         switch on context.getResult() {
             when SUCCESS {
                 ChainableTestUtility.insertChainableTest(
@@ -17,5 +17,6 @@ public class ChainableFinalizerCustom extends ChainableFinalizer {
                 // Unhandled exception logic here
             }
         }
+        return true;
     }
 }

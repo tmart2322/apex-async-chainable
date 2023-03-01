@@ -30,14 +30,14 @@ This library enables chaining of any number of asynchronous processes (Batch, Qu
 
 Without this library, chaining asynchronous processes in Salesforce requires tightly coupled chaining and business logic implementations. This library aims to make this process simpler by doing the following:
 
-- Allows Batch, Queueable, or Schedulable to be chained.
-- Exposes extensible classes that have the chaining logic embedded and surfaces abstract methods for custom business logic.
-- Allows sharing of variables between chain members.
-- Allows both promise-like chaining and list-driven chaining.
-- Utilizes Transaction Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
-- Supports both Iterable and QueryLocator Batch types
-- Allows a max depth to be defined to avoid the risk of infinite recursive chaining
-- Lightweight (<100 lines of testable code)
+-   Allows Batch, Queueable, or Schedulable to be chained.
+-   Exposes extensible classes that have the chaining logic embedded and surfaces abstract methods for custom business logic.
+-   Allows sharing of variables between chain members.
+-   Allows both promise-like chaining and list-driven chaining.
+-   Utilizes Transaction Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
+-   Supports both Iterable and QueryLocator Batch types
+-   Allows a max depth to be defined to avoid the risk of infinite recursive chaining
+-   Lightweight (<100 lines of testable code)
 
 ### With Chainable
 
@@ -129,13 +129,23 @@ public class ChainableQueueableCustom extends ChainableQueueable {
 }
 ```
 
-Custom Finalizers also be defined by extending the `ChainableFinalizer` class.
+By default, the ChainableFinalizer _will not_ execute the next Chainable if there is an uncaught exception in the ChainableQueueable. If you'd like to execute the next Chainable when there is an uncaught exception, pass true to `setRunOnUncaughtException` when instantiating the ChainableQueueable...
+
+```java
+mew ChainableQueueableCustom()
+    .setRunNextOnUncaughtException(true)
+    .run();
+```
+
+If more granular control is needed over in ChainableFinalizer (such as logging, custom logic on when to execute next, etc.), extend `ChainableFinalizer` to override the default ChainableFinalizer `execute` method.
 
 ```java
 public class ChainableFinalizerCustom extends ChainableFinalizer {
-    protected override void execute() {
+    protected override Boolean execute() {
         // Finalizer execute logic here
         ...
+        // Optionally return whether to run the next chainable based on the default execute logic provided by the class, or return based on your own logic
+        return this.defaultRunNext();
     }
 }
 ```
@@ -144,18 +154,6 @@ public class ChainableFinalizerCustom extends ChainableFinalizer {
 public class ChainableQueueableWithCustomFinalizer extends ChainableQueueable {
     public ChainableQueueableWithCustomFinalizer() {
         super(new ChainableFinalizerCustom());
-    }
-
-    protected override Boolean execute() { ... }
-}
-```
-
-By default, the Finalizer _will not_ execute the next Chainable if there is an uncaught exception in the Queueable. If you'd like to execute the next Chainable when there is an uncaught exception, pass true to the ChainableFinalizer's constructor.
-
-```java
-public class ChainableQueueableCustom extends ChainableQueueable {
-    public ChainableQueueableCustom() {
-        super(new ChainableFinalizer(true));
     }
 
     protected override Boolean execute() { ... }
@@ -273,9 +271,11 @@ However, custom execute logic can be written by overriding the `execute` method.
 ```java
 public class ChainableSchedulableWithExecute extends ChainableSchedulable {
     public ChainableSchedulableWithExecute() { ... }
-    protected override void execute() {
+    protected override Boolean execute() {
         // Schedulable execute logic here
         ...
+        // Return whether to execute the next Chainable
+        return true;
     }
 }
 ```

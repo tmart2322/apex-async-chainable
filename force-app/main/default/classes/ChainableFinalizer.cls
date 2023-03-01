@@ -6,52 +6,67 @@
 public virtual class ChainableFinalizer implements Finalizer {
     // INSTANCE VARIABLES
     /**
-     * current The current instance of the QueueableChainable
-     */
-    public ChainableQueueable current;
-    /**
      * context the FinalizerContext of the Finalizer
      */
-    protected FinalizerContext context;
+    protected FinalizerContext context { protected get; private set; }
     /**
-     * runNextChainable whether to run the next Chainable
+     * current The current instance of the QueueableChainable
      */
-    public Boolean runNextChainable;
-
-    // CONSTRUCTORS
+    private ChainableQueueable current;
     /**
-     * @description Constructor that initalizes runNextChainable to false
+     * queueableResult the return of ChainableQueueable's execute method. If null assume uncaught exception ocurred
      */
-    public ChainableFinalizer() {
-        this(false);
-    }
-
-    /**
-     * @description Constructor that allows a custom value for runNextChainable
-     * @param runNextChainable
-     */
-    public ChainableFinalizer(Boolean runNextChainable) {
-        this.runNextChainable = runNextChainable;
-    }
+    protected Boolean queueableResult { protected get; private set; }
 
     // VIRTUAL METHODS
     /**
-     * @description Abstract method for execute method logic
+     * @description Virtual method for execute logic.
+     * By default, calls `defaultRunNext` to determine whether to run the next Queueable.
      */
-    protected virtual void execute() {
+    protected virtual Boolean execute() {
+        return this.defaultRunNext();
     }
 
     // PUBLIC METHODS
     /**
-     * Overrides the default execute method to call the custom
-     * virtual methods which can be overriden by the user
+     * @description Overrides the default execute method to call the custom
+     * virtual `execute` which can be overriden by the user
      * @param context
      */
     public void execute(FinalizerContext context) {
         this.context = context;
-        this.execute();
-        if (this.runNextChainable) {
+        Boolean runNextChainable = this.execute();
+        if (runNextChainable) {
             this.current.runNext();
         }
+    }
+
+    /**
+     * @description By default, it will take the result from the ChainableQueueable's execute method.
+     * If the result from the ChainableQueueable's execute method is not set,
+     * runNextChainableOnUncaughtException willl determine whether the next Chainable is run.
+     * Can be overridden for custom implementations.
+     * @return  `Boolean` default logic used to determine whether to run the next Chainable
+     */
+    public Boolean defaultRunNext() {
+        return this.queueableResult != null
+            ? this.queueableResult
+            : current.getRunNextOnUncaughtException();
+    }
+
+    /**
+     * @description Set the current ChainableQueueable on the Finalizer
+     * @param current
+     */
+    public void setCurrent(ChainableQueueable current) {
+        this.current = current;
+    }
+
+    /**
+     * @description Set the result of the execution from the Queueable
+     * @param queueableResult
+     */
+    public void setQueueableResult(Boolean queueableResult) {
+        this.queueableResult = queueableResult;
     }
 }

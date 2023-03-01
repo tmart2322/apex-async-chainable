@@ -1,3 +1,8 @@
+/**
+ * @description `ChainableSchedulable` An abstract class for implementing a QueryLocator Batch Chainable
+ * @author Tristan Martin
+ * @since October 9th, 2022
+ */
 public abstract class ChainableBatchQueryLocator extends ChainableBatchBase implements Database.Batchable<sObject> {
     // CONSTRUCTORS
     /**

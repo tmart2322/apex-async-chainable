@@ -32,8 +32,10 @@ public abstract class ChainableSchedulable extends Chainable implements Schedula
     // VIRTUAL METHODS
     /**
      * @description Optional method to implement that runs any execution logic for the Schedulable
+     * @return `Boolean` whether to run the next Chainable (true by default)
      */
-    protected virtual void execute() {
+    protected virtual Boolean execute() {
+        return true;
     }
 
     // PUBLIC METHODS
@@ -44,8 +46,10 @@ public abstract class ChainableSchedulable extends Chainable implements Schedula
      */
     public void execute(SchedulableContext context) {
         this.context = context;
-        this.execute();
-        this.runNext();
+        Boolean runNextChainable = this.execute();
+        if (runNextChainable) {
+            this.runNext();
+        }
     }
 
     /**

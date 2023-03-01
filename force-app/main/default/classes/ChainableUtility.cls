@@ -5,7 +5,7 @@
  */
 public class ChainableUtility {
     /**
-     * @description Chains a list of chainables and returns the first item in the Chain
+     * @description Chains a list of Chainables and returns the first item in the chain
      * @param chainables List of Chainables to chain
      */
     public static Chainable chain(List<Chainable> chainables) {
