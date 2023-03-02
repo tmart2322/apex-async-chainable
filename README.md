@@ -212,7 +212,7 @@ public class ChainableBatchQueryLocatorWithCustomBatchSize extends ChainableBatc
 Chainable Batches with an Iterable are created by extending the `ChainableBatchIterable` class.
 
 ```java
-public class ChainableBatchIteratorCustom extends ChainableBatchIterator {
+public class ChainableBatchIterableCustom extends ChainableBatchIterable {
     protected override Iterable<Object> start() {
         // Batch start logic here
         ...
