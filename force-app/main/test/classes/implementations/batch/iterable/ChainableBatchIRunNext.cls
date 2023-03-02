@@ -3,7 +3,6 @@ public class ChainableBatchIRunNext extends ChainableBatchIterable {
     Boolean runNext;
 
     public ChainableBatchIRunNext(Boolean runNext) {
-        super(String.class);
         this.runNext = runNext;
     }
 
@@ -11,7 +10,7 @@ public class ChainableBatchIRunNext extends ChainableBatchIterable {
         return new List<Object>{};
     }
 
-    protected override void execute(List<Object> scope) {
+    protected override void execute(Iterable<Object> scope) {
     }
 
     protected override Boolean finish() {

@@ -209,20 +209,16 @@ public class ChainableBatchQueryLocatorWithCustomBatchSize extends ChainableBatc
 
 [ChainableBatchIterable Test Class](https://github.com/tmart2322/apex-async-chainable/blob/master/force-app/main/test/classes/ChainableBatchIterableTest.cls)
 
-Chainable Batches with a QueryLocator are created by extending the `ChainableBatchIterable` class. An important note is that you must pass the Type of the Iterator used in the `start` method to the base class' constructor as this is needed for proper casting in the execute method.
+Chainable Batches with an Iterable are created by extending the `ChainableBatchIterable` class.
 
 ```java
 public class ChainableBatchIteratorCustom extends ChainableBatchIterator {
-    public ChainableBatchIteratorCustom() {
-        super(ITERATOR_TYPE.class); // Pass the Type of the Iterator
-    }
-
-    protected override Iterator<Object> start() {
+    protected override Iterable<Object> start() {
         // Batch start logic here
         ...
     }
 
-    protected override void execute(List<Object> scope) {
+    protected override void execute(Iterable<Object> scope) {
         // Batch execute logic here
         ...
     }
@@ -241,12 +237,12 @@ The default batch size is 200 for `ChainableBatchIterable` implementations. This
 ```java
 public class ChainableBatchIterableWithCustomBatchSize extends ChainableBatchIterable {
     public ChainableBatchIterableWithCustomBatchSize() {
-        super(ITERATOR_TYPE.class, 100); // Sets the batch size to 100
+        super(100); // Sets the batch size to 100
     }
 
-    protected override Iterator<Object> start() { ... }
+    protected override Iterable<Object> start() { ... }
 
-    protected override void execute(List<Object> scope) { ... }
+    protected override void execute(Iterable<Object> scope) { ... }
 
     protected override Boolean finish() { ... }
 }
