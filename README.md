@@ -37,7 +37,8 @@ Without this library, chaining asynchronous processes in Salesforce requires tig
 -   Allows both promise-like chaining and list-driven chaining.
 -   Utilizes Transaction Finalizers for Queueables to ensure the chain can continue even if an uncaught exception is surfaced in the Queueable (including uncatchable limit exceptions).
 -   Supports both Iterable and QueryLocator Batch types
--   Allows a max depth to be defined to avoid the risk of infinite recursive chaining
+-   Allows a max depth to be defined
+-   Comes with a custom metadata kill switch that allows stopping Chainables globally or for a specific Chainable implementation
 -   Lightweight (<100 lines of testable code)
 
 ### With Chainable
