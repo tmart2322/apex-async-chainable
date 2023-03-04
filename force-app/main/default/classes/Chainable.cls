@@ -58,7 +58,7 @@ public abstract class Chainable {
      * @description Public methods that starts the Chainable
      */
     public void run() {
-        if (!this.killSwitchActive(this.getClassName())) {
+        if (!this.killSwitchOn(this.getClassName())) {
             this.runChainable();
         }
     }
@@ -133,18 +133,16 @@ public abstract class Chainable {
     }
 
     // PROTECTED METHODS
-    protected Boolean killSwitchActive(String className) {
-        Boolean isKillSwitchActive = false;
+    protected Boolean killSwitchOn(String className) {
+        Boolean isKillSwitchOn = false;
         for (Chainable_Kill_Switch__mdt chainableKillSwitch : [
             SELECT Active__c
             FROM Chainable_Kill_Switch__mdt
             WHERE Class_Name__c = '' OR Class_Name__c = :className
         ]) {
-            isKillSwitchActive = isKillSwitchActive == true
-                ? true
-                : !chainableKillSwitch.Active__c;
+            isKillSwitchOn = isKillSwitchOn || !chainableKillSwitch.Active__c;
         }
-        return isKillSwitchActive;
+        return isKillSwitchOn;
     }
 
     /**
