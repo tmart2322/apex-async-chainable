@@ -43,7 +43,7 @@ public abstract class Chainable {
      * @description Abstract method that defines how to run the Chainable.
      * @return `void`
      */
-    public abstract void run();
+    protected abstract void runChainable();
 
     // VIRTUAL METHODS
     /**
@@ -54,6 +54,15 @@ public abstract class Chainable {
     }
 
     // PUBLIC METHODS
+    /**
+     * @description Public methods that starts the Chainable
+     */
+    public void run() {
+        if (!this.killSwitchOn(this.getClassName())) {
+            this.runChainable();
+        }
+    }
+
     /**
      * @description Adds the next Chainable to the queue. If next is already defined for the current Chainable
      * then it will be overridden with the new Chainable and be added as the next item in the queue.
@@ -121,6 +130,27 @@ public abstract class Chainable {
         this.maxDepth = maxDepth;
         this.synchronize();
         return this;
+    }
+
+    // PROTECTED METHODS
+    protected Boolean killSwitchOn(String className) {
+        Boolean isKillSwitchOn = false;
+        for (Chainable_Kill_Switch__mdt chainableKillSwitch : [
+            SELECT Active__c
+            FROM Chainable_Kill_Switch__mdt
+            WHERE Class_Name__c = '' OR Class_Name__c = :className
+        ]) {
+            isKillSwitchOn = isKillSwitchOn || !chainableKillSwitch.Active__c;
+        }
+        return isKillSwitchOn;
+    }
+
+    /**
+     * @description Gets the name of the class, used for the killswitch
+     * @return  `String`
+     */
+    protected String getClassName() {
+        return String.valueOf(this).split(':')[0];
     }
 
     // PRIVATE METHODS
