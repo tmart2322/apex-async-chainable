@@ -79,14 +79,14 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
         this.finalizer.setQueueableResult(queueableResult);
     }
 
+    // PROTECTED METHODS
     /**
      * @description Enqueues the queueable
      */
-    public override void run() {
+    protected override void runChainable() {
         System.enqueueJob(this);
     }
 
-    // PROTECTED METHODS
     /**
      * @description Used to synchronize any updates of the chain to the finalizer
      */

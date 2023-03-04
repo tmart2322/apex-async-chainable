@@ -42,7 +42,7 @@ public abstract class ChainableBatchBase extends Chainable implements Database.S
     /**
      * @description Exposing the run method from Chainable as abstract so it can be implemented for both types of batch
      */
-    public override abstract void run();
+    protected override abstract void runChainable();
 
     // PUBLIC METHODS
     /**

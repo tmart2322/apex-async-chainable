@@ -52,10 +52,11 @@ public abstract class ChainableSchedulable extends Chainable implements Schedula
         }
     }
 
+    // PROTECTED METHODS
     /**
      * @description Schedule the Schedulable
      */
-    public override void run() {
+    protected override void runChainable() {
         System.schedule(this.jobName, this.cronExp, this);
     }
 }

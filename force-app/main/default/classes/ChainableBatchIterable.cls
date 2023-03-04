@@ -66,10 +66,11 @@ public abstract class ChainableBatchIterable extends ChainableBatchBase implemen
         this.execute(scope);
     }
 
+    // PROTECTED METHODS
     /**
      * @description Run the batch
      */
-    public override void run() {
+    protected override void runChainable() {
         Database.executeBatch(this, this.batchSize);
     }
 }
