@@ -19,6 +19,7 @@
                 -   [Batch With Iterable](#batch-with-iterable)
             -   [Schedulable](#schedulable)
         -   [Other Usage Info](#other-usage-info)
+            -   [Using Kill Switch](#using-kill-switch)
             -   [Using Pass Through](#using-pass-through)
             -   [Setting Max Depth](#setting-max-depth)
             -   [Accessing Queueable, Schedulable, Batch, or Finalizer Context](#accessing-queueable-schedulable-batch-or-finalizer-context)
@@ -277,6 +278,12 @@ public class ChainableSchedulableWithExecute extends ChainableSchedulable {
 ```
 
 ### Other Usage Info
+
+#### Using Kill Switch
+
+Use the `Chainable_Kill_Switch__mdt` Custom Metadata Type to stop the execution of a Chainable if needed.
+
+This library comes with a Global Kill Switch by default which will stop the execution of all Chainables. If you'd like to stop executions for a specific Chainable, you can create a new Custom Metadata record and specify the `Class Name` field to configure it for the specific Chainable implementation.
 
 #### Using Pass Through
 
