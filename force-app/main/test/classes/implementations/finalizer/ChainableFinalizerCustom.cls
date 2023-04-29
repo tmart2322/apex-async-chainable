@@ -6,17 +6,14 @@ public class ChainableFinalizerCustom extends ChainableFinalizer {
         this.chainableTestName = chainableTestName;
     }
 
-    protected override Boolean execute() {
+    protected override Boolean execute(Boolean defaultRunNext) {
         switch on context.getResult() {
             when SUCCESS {
                 ChainableTestUtility.insertChainableTest(
                     this.chainableTestName
                 );
             }
-            when UNHANDLED_EXCEPTION {
-                // Unhandled exception logic here
-            }
         }
-        return true;
+        return defaultRunNext;
     }
 }

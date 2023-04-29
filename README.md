@@ -131,11 +131,19 @@ public class ChainableQueueableCustom extends ChainableQueueable {
 }
 ```
 
-By default, the ChainableFinalizer _will not_ execute the next Chainable if there is an uncaught exception in the ChainableQueueable. If you'd like to execute the next Chainable when there is an uncaught exception, pass true to `setRunOnUncaughtException` when instantiating the ChainableQueueable...
+By default, the ChainableQueueable uses a finalizer to execute the next Chainable. If you'd like to remove the finalizer and run the next Chainable from the current context, call `removeFinalizer` when instantiating the ChainableQueueable.
 
 ```java
-mew ChainableQueueableCustom()
-    .setRunNextOnUncaughtException(true)
+new ChainableQueueableCustom()
+    .removeFinalizer()
+    .run();
+```
+
+By default, the ChainableFinalizer _will not_ execute the next Chainable if there is an uncaught exception in the ChainableQueueable. If you'd like to execute the next Chainable when there is an uncaught exception, pass true to `setRunNextOnUncaughtException` when instantiating the finalizer using the `setFinalizer` method.
+
+```java
+new ChainableQueueableCustom()
+    .setFinalizer(new ChainableFinalizer().setRunNextOnUncaughtException(true))
     .run();
 ```
 
@@ -143,23 +151,20 @@ If more granular control is needed over in ChainableFinalizer (such as logging, 
 
 ```java
 public class ChainableFinalizerCustom extends ChainableFinalizer {
-    protected override Boolean execute() {
+    protected override Boolean execute(Boolean defaultRunNext) {
         // Finalizer execute logic here
         ...
-        // Optionally return whether to run the next chainable based on the default execute logic provided by the class, or return based on your own logic
-        return this.defaultRunNext();
+        // Use the default ChainableFinalizer logic on whether to run next by returning defaultRunNext.
+        // Otherwise, use your own logic to determine whether the next Chainable should be run.
+        return defaultRunNext|true|false;
     }
 }
 ```
 
 ```java
-public class ChainableQueueableWithCustomFinalizer extends ChainableQueueable {
-    public ChainableQueueableWithCustomFinalizer() {
-        super(new ChainableFinalizerCustom());
-    }
-
-    protected override Boolean execute() { ... }
-}
+new ChainableQueueableCustom()
+    .setFinalizer(new ChainableFinalizerCustom())
+    .run();
 ```
 
 #### Batch

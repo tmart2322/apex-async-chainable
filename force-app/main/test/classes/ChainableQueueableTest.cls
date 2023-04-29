@@ -14,6 +14,19 @@ public class ChainableQueueableTest {
     }
 
     @IsTest
+    public static void chainableQueueableSingleSuccessWithoutFinalizer() {
+        Test.startTest();
+        new ChainableQueueableSuccess('Test 1').removeFinalizer().run();
+        Test.stopTest();
+
+        System.assertEquals(
+            1,
+            ChainableTestUtility.getChainableTests().size(),
+            'Should successfully insert a Chainable_Test__c when called'
+        );
+    }
+
+    @IsTest
     public static void chainableQueueableMultipleSuccess() {
         Test.startTest();
         new ChainableQueueableSuccess('Test 1')
@@ -129,8 +142,8 @@ public class ChainableQueueableTest {
         final String CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME = 'Custom Finalizer Test';
 
         Test.startTest();
-        new ChainableQueueableSuccessCustomFinalizer(
-                'Test',
+        new ChainableQueueableSuccess('Test')
+            .setFinalizer(
                 new ChainableFinalizerCustom(
                     CHAINABLE_FINALIZER_CUSTOM_CHAINABLE_NAME
                 )
@@ -164,7 +177,6 @@ public class ChainableQueueableTest {
         try {
             Test.startTest();
             new ChainableQueueableError()
-                .setRunNextOnUncaughtException(true)
                 .then(new ChainableQueueableSuccess('Test'))
                 .run();
             Test.stopTest();

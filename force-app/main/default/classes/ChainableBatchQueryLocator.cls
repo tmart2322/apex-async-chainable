@@ -30,7 +30,6 @@ public abstract class ChainableBatchQueryLocator extends ChainableBatchBase impl
     /**
      * @description Abstract method for execute method logic
      * @param scope List of sObjects returned from the start method
-     * @return `void`
      */
     protected abstract void execute(List<sObject> scope);
 
