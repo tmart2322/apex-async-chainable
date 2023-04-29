@@ -13,27 +13,13 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
      * finalizer the instace of the QueueableFinalizer to run after the implementation
      */
     private ChainableFinalizer finalizer;
-    /**
-     * runNextOnUncaughtException whether the QueueableFinalizer will execute the next Chainable on an uncaught
-     * exception (default is false)
-     */
-    public Boolean runNextOnUncaughtException { public get; private set; }
 
     // CONSTRUCTORS
     /**
      * @description Uses the default ChainableFinalizer and sets runNextOnUncaughtException to false
      */
     public ChainableQueueable() {
-        this(new ChainableFinalizer());
-    }
-
-    /**
-     * @description Allows a user-defined ChainableFinalizer to be used  and sets runNextOnUncaughtException to false
-     * @param finalizer The ChainableFinalizer to use
-     */
-    public ChainableQueueable(ChainableFinalizer finalizer) {
-        this.finalizer = finalizer;
-        this.runNextOnUncaughtException = false;
+        setFinalizer(new ChainableFinalizer());
     }
 
     // ABSTRACT METHODS
@@ -45,38 +31,43 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
 
     // PUBLIC METHODS
     /**
-     * @description set whether the QueueableFinalizer will execute the next Chainable on an uncaught
-     * exception. By default, Queueable will not run on uncaught exception.
-     * @param runNextOnUncaughtException whether to run the next Chainable on an uncaught exception
-     * @return `ChainableQueueable` instance of the ChainableQueueable
-     */
-    public ChainableQueueable setRunNextOnUncaughtException(
-        Boolean runNextOnUncaughtException
-    ) {
-        this.runNextOnUncaughtException = runNextOnUncaughtException;
-        this.synchronize();
-        return this;
-    }
-
-    /**
-     * @description Returns whether the next Chainable will run on uncaught exception
-     * @return `Boolean` whether the next Chainable will run on uncaught exception
-     */
-    public Boolean getRunNextOnUncaughtException() {
-        return this.runNextOnUncaughtException;
-    }
-
-    /**
      * @description Overrides the default execute method to call the execute abstract method
-     * which will be implemented by the user and initializes the finalizer.
      * @param context QueueableContext context of the queueable
      */
     public void execute(QueueableContext context) {
         this.context = context;
-        System.attachFinalizer(finalizer);
-        this.synchronize();
-        Boolean queueableResult = this.execute();
-        this.finalizer.setQueueableResult(queueableResult);
+        if (this.getFinalizer() != null) {
+            this.executeWithFinalizer();
+        } else {
+            this.executeWithoutFinalizer();
+        }
+    }
+
+    /**
+     * @description Attach a custom finalizer to the ChainableQueueable. Defaults runNextOnUncaughtException to false.
+     * @param finalizer the finalizer to attach.
+     * @return `Chainable` the current instance of the ChainableQueueable.
+     */
+    public ChainableQueueable setFinalizer(ChainableFinalizer finalizer) {
+        this.finalizer = finalizer;
+        return this;
+    }
+
+    /**
+     * @description Removes the finalizer and runs the next Chainable in the same context.
+     * @return  `ChainableQueueable` the current instance of the ChainableQueueable.
+     */
+    public ChainableQueueable removeFinalizer() {
+        this.finalizer = null;
+        return this;
+    }
+
+    /**
+     * @description Returns the finalizer
+     * @return  `ChainableFinalizer` finalizer for the ChainableQueueable.
+     */
+    public ChainableFinalizer getFinalizer() {
+        return this.finalizer;
     }
 
     // PROTECTED METHODS
@@ -91,6 +82,27 @@ public abstract class ChainableQueueable extends Chainable implements Queueable,
      * @description Used to synchronize any updates of the chain to the finalizer
      */
     protected override void synchronize() {
-        this.finalizer.setCurrent(this);
+        this.finalizer?.setCurrent(this);
+    }
+
+    // PRIVATE METHODS
+    /**
+     * @description Executes the next Chainable via a finalizer
+     */
+    private void executeWithFinalizer() {
+        System.attachFinalizer(finalizer);
+        this.synchronize();
+        Boolean queueableResult = this.execute();
+        this.finalizer.setQueueableResult(queueableResult);
+    }
+
+    /**
+     * @description Executes the next Chainable in the same context
+     */
+    private void executeWithoutFinalizer() {
+        Boolean runNextChainable = this.execute();
+        if (runNextChainable) {
+            this.runNext();
+        }
     }
 }

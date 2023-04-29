@@ -10,21 +10,34 @@ public virtual class ChainableFinalizer implements Finalizer {
      */
     protected FinalizerContext context { protected get; private set; }
     /**
-     * current The current instance of the QueueableChainable
+     * current the current instance of the QueueableChainable
      */
     private ChainableQueueable current;
     /**
-     * queueableResult the return of ChainableQueueable's execute method. If null assume uncaught exception ocurred
+     * queueableResult the return of ChainableQueueable's execute method. Null in case of uncaught exception.
      */
     protected Boolean queueableResult { protected get; private set; }
+    /**
+     * runNextOnUncaughtException whether the next Chainable will be executed on uncaught exception. Defaulted to false.
+     */
+    protected Boolean runNextOnUncaughtException { protected get; private set; }
+
+    // CONSTRUCTORS
+    /**
+     * @description Defaults runNextOnUncaughtException to false
+     */
+    public ChainableFinalizer() {
+        this.runNextOnUncaughtException = false;
+    }
 
     // VIRTUAL METHODS
     /**
      * @description Virtual method for execute logic.
-     * By default, calls `defaultRunNext` to determine whether to run the next Queueable.
+     * @param defaultRunNext the chainable finalizers default run next logic
+     * @return `Boolean` whether to run the next Chainable. By default returns defaultRunNext.
      */
-    protected virtual Boolean execute() {
-        return this.defaultRunNext();
+    protected virtual Boolean execute(Boolean defaultRunNext) {
+        return defaultRunNext;
     }
 
     // PUBLIC METHODS
@@ -35,28 +48,25 @@ public virtual class ChainableFinalizer implements Finalizer {
      */
     public void execute(FinalizerContext context) {
         this.context = context;
-        Boolean runNextChainable = this.execute();
+        Boolean runNextChainable = this.execute(this.defaultRunNext());
         if (runNextChainable) {
             this.current.runNext();
         }
     }
 
     /**
-     * @description By default, it will take the result from the ChainableQueueable's execute method.
-     * If the result from the ChainableQueueable's execute method is not set,
-     * runNextChainableOnUncaughtException willl determine whether the next Chainable is run.
-     * Can be overridden for custom implementations.
-     * @return  `Boolean` default logic used to determine whether to run the next Chainable
+     * @description Sets runNextOnUncaughtException on the finalizer
+     * @param runNextOnUncaughtException whether the next Chainable will be executed on uncaught exception.
      */
-    public Boolean defaultRunNext() {
-        return this.queueableResult != null
-            ? this.queueableResult
-            : current.getRunNextOnUncaughtException();
+    public void setRunNextOnUncaughtException(
+        Boolean runNextOnUncaughtException
+    ) {
+        this.runNextOnUncaughtException = runNextOnUncaughtException;
     }
 
     /**
      * @description Set the current ChainableQueueable on the Finalizer
-     * @param current
+     * @param current the current instance of the QueueableChainable
      */
     public void setCurrent(ChainableQueueable current) {
         this.current = current;
@@ -64,9 +74,24 @@ public virtual class ChainableFinalizer implements Finalizer {
 
     /**
      * @description Set the result of the execution from the Queueable
-     * @param queueableResult
+     * @param queueableResult the return of ChainableQueueable's execute method. Null in case of uncaught exception.
      */
     public void setQueueableResult(Boolean queueableResult) {
         this.queueableResult = queueableResult;
+    }
+
+    // PRIVATE METHODS
+    /**
+     * @description If uncaught exception, returns result of runNextOnUncaughtException.
+     * Otherwise, returns result of ChainableQueueable's execute method.
+     * @return  `Boolean` whether to run the next Chainable
+     */
+    private Boolean defaultRunNext() {
+        switch on this.context.getResult() {
+            when UNHANDLED_EXCEPTION {
+                return this.runNextOnUncaughtException;
+            }
+        }
+        return this.queueableResult;
     }
 }
